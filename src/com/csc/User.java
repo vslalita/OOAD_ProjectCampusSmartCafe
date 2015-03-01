@@ -6,7 +6,8 @@ public class User {
 	private String lastName;
 	private int cardNumber;
 	
-	User(int id, String firstName,String lastName, int cardNumber){
+	User(String firstName,String lastName, int cardNumber){
+		//TODO autogenerate id
 		this.id=id;
 		this.firstName=firstName;
 		this.lastName=lastName;
