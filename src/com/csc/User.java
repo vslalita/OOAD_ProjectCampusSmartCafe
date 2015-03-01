@@ -1,3 +1,4 @@
+package com.csc;
 
 public class User {
     private int id;
