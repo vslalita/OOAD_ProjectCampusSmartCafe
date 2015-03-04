@@ -1,5 +1,7 @@
 package com.csc;
 
+import java.util.ArrayList;
+
 public class Cafe extends FoodJoint {
 
 	public Cafe(FoodPurchaseTransaction transaction, int locationId) {
@@ -14,9 +16,9 @@ public class Cafe extends FoodJoint {
 	}
 
 	@Override
-	public void displayItems() {
+	public ArrayList<FoodItem> displayItems() {
 		// TODO display items that are for a cafe
-
+       return null;
 	}
 
 }

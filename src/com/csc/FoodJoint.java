@@ -1,5 +1,7 @@
 package com.csc;
 
+import java.util.ArrayList;
+
 abstract public class FoodJoint {
     protected FoodPurchaseTransaction transaction;
     private int locationId;
@@ -7,6 +9,10 @@ abstract public class FoodJoint {
     public FoodJoint(FoodPurchaseTransaction transaction,int locationId){
     	this.transaction=transaction;
     	this.locationId=locationId;
+    }
+    
+    public FoodJoint(){
+    	
     }
     
     //Template pattern
@@ -25,7 +31,7 @@ abstract public class FoodJoint {
 		return true;
 	}
 	protected abstract void createTransaction();
-	public abstract void displayItems();
+	public abstract ArrayList<FoodItem> displayItems();
 	private void updateProfile(){
 		//TODO code for updating expenses and dietary profile
 		//TODO uses Profile class to update the profile.

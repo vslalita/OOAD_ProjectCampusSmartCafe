@@ -22,4 +22,6 @@ public class UserFoodPreference {
     	//TODO update the table with respective percentages and have to be less than 100
     }
     
+    
+    
 }
