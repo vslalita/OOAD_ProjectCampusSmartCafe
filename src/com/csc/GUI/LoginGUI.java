@@ -1,6 +1,8 @@
-package com.csc;
+package com.csc.GUI;
 
 import javax.swing.*;
+
+import com.csc.CurrentSession;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -39,17 +41,18 @@ public class LoginGUI extends JFrame {
 			public void actionPerformed(ActionEvent ae) {
 				String pcode = cardNumberTextField.getText();
 				if(pcode.matches("[0-9]+") && pcode.length()==5) {
-					newframe regFace =new newframe();
 					 CurrentSession.getMemberInstance(pcode); // create the user for this session.
-					 regFace.setVisible(true);
-					 dispose();
+					 if(CurrentSession.getCurrentUser()!=null){
+						 JFrame homeFrame =new HomPageGUI();
+						 homeFrame.setVisible(true);
+						 dispose();
+					 }
 				} 
 				else {
 					JOptionPane.showMessageDialog(null,"Wrong Passcode");
 					cardNumberTextField.setText("");
 					cardNumberTextField.requestFocus();
 				}
-
 			}
 		});
 	}

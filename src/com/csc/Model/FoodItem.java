@@ -1,4 +1,4 @@
-package com.csc;
+package com.csc.Model;
 
 public class FoodItem {
 	private int id;

@@ -5,6 +5,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.csc.Model.FoodItem;
+import com.csc.Model.FoodPurchaseTransaction;
+
 public class VendingMachine extends FoodJoint {
 
 	public VendingMachine(FoodPurchaseTransaction transaction, int locationId) {
@@ -17,9 +20,16 @@ public class VendingMachine extends FoodJoint {
 	}
 
 	@Override
-	protected void createTransaction() {
+	protected void createTransaction(ArrayList<FoodItem> foodItems) {
 		// TODO create a transaction. Implementation involves immediate delivery of the item.
-
+		if(foodItems.size()>0){
+			FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,CurrentSession.getCurrentUser().getCardNumber(),1);
+			transaction.setStatus("Delivered");
+			transaction.createTransaction();
+		}
+		else{
+			System.out.println("Food Items not selected");
+		}
 	}
 
 	@Override

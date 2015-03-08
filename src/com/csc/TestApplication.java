@@ -2,6 +2,9 @@ package com.csc;
 
 import java.util.ArrayList;
 
+import com.csc.Model.FoodItem;
+import com.csc.Model.User;
+
 public class TestApplication {
 
 	public static void main(String[] args){
@@ -17,5 +20,6 @@ public class TestApplication {
 			 FoodItem item=foodItems.get(i);
 			 System.out.println("FoodItem: id- "+item.getId()+ " name- "+item.getItemName()+" Price- "+item.getPrice()+" Calories- "+item.getCalories());
 		 }
+		 
 	}	
 }

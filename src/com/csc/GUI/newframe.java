@@ -1,4 +1,4 @@
-package com.csc;
+package com.csc.GUI;
 
 
 	import javax.swing.*;
@@ -7,10 +7,6 @@ package com.csc;
 
 
 	public class newframe extends JFrame {
-
-	public static void main(String[] args) {
-	newframe frameTabel = new newframe();
-	}
 
 	JLabel welcome = new JLabel("Welcome to a New Frame");
 	JPanel panel = new JPanel();
