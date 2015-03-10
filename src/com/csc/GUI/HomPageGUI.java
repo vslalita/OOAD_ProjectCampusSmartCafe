@@ -6,8 +6,8 @@
 package com.csc.GUI;
 
 import com.csc.*;
-import com.csc.Model.FoodItem;
-import com.csc.Model.FoodPreference;
+import com.csc.model.FoodItem;
+import com.csc.model.FoodPreference;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;

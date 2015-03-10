@@ -5,20 +5,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.csc.Model.FoodItem;
-import com.csc.Model.FoodPurchaseTransaction;
+import com.csc.model.FoodItem;
+import com.csc.model.FoodPurchaseTransaction;
 
-public class Cafe extends FoodJoint {
+public class Cafe extends FoodJointService {
 
-	public Cafe(int id,String location,int xPosition,int yPosition) {
-		super(id, location,xPosition,yPosition);
-		// TODO Auto-generated constructor stub
-	}
 	
-	public Cafe(int id){
-		super(id);
-	}
-
 	@Override
 	protected void createTransaction(ArrayList<FoodItem> foodItems) {
 		// TODO creates the transaction by setting status and the pickup location.

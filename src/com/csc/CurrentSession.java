@@ -4,12 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.csc.Model.User;
+import com.csc.model.FoodJoint;
+import com.csc.model.User;
 
 public class CurrentSession {
 	//currentUser holds the information of the member who is currently logged in
 	private static  User currentUser;
-	private static FoodJoint currentMachine=new Cafe(2);
+	private static FoodJoint currentMachine;
 	private static CurrentSession currentSession=null;
 	private CurrentSession(User user){
 		currentUser=user;
@@ -37,7 +38,7 @@ public class CurrentSession {
 		}
 	}
 	
-	public static FoodJoint getMachine(){
+	public static FoodJointService getMachine(){
 		return currentMachine;
 	}
 	

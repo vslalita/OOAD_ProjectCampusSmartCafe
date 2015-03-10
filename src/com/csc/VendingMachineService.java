@@ -5,22 +5,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.csc.Model.FoodItem;
-import com.csc.Model.FoodPurchaseTransaction;
+import com.csc.model.FoodItem;
+import com.csc.model.FoodPurchaseTransaction;
 
-public class VendingMachine extends FoodJoint {
+public class VendingMachineService extends FoodJointService {
 
-	public VendingMachine(int id,String location,int xPosition,int yPosition) {
-		super(id, location,xPosition,yPosition);
+	
+	public VendingMachineService(){
 	}
 	
-	public VendingMachine(){
-	}
 	
-	public VendingMachine(int id){
-		super(id);
-	}
-
 	@Override
 	protected void createTransaction(ArrayList<FoodItem> foodItems) {
 		// TODO create a transaction. Implementation involves immediate delivery of the item.

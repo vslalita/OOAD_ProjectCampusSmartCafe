@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 
 import com.csc.CurrentSession;
-import com.csc.Model.FoodPreference;
+import com.csc.model.FoodPreference;
 
 /**
  *
