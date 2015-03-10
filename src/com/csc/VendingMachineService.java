@@ -5,21 +5,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.csc.Model.FoodItem;
-import com.csc.Model.FoodPurchaseTransaction;
+import com.csc.model.FoodItem;
+import com.csc.model.FoodPurchaseTransaction;
 
-public class VendingMachine extends FoodJoint {
+public class VendingMachineService extends FoodJointService {
 
-	public VendingMachine(int id,String location,int xPosition,int yPosition) {
-		super(id, location,xPosition,yPosition);
+	
+	public VendingMachineService(){
 	}
 	
-	public VendingMachine(){
-	}
 	
-	public VendingMachine(int id){
-		super(id);
+	public VendingMachineService(int id, String location, int xPosition,
+			int yPosition,boolean isCafe,boolean isVendingMachine) {
+		// TODO Auto-generated constructor stub
+		super(id, location, xPosition,
+			yPosition,isCafe,isVendingMachine);
 	}
+
 
 	@Override
 	protected void createTransaction(ArrayList<FoodItem> foodItems) {

@@ -8,36 +8,60 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.csc.Model.FoodItem;
-import com.csc.Model.FoodPreference;
-import com.csc.Model.FoodPurchaseTransaction;
+import com.csc.model.FoodItem;
+import com.csc.model.FoodPreference;
+import com.csc.model.FoodPurchaseTransaction;
 
-abstract public class FoodJoint {
+abstract public class FoodJointService {
     private int id;
+    //TODO include property name
 	protected String location;
 	private int xPosition;
 	private int yposition;
+	private boolean isCafe;
+	private boolean isVendingMachine;
     
-    public FoodJoint(int id,String location,int xPosition,int yPosition){
+    public FoodJointService(int id,String location,int xPosition,int yPosition,boolean isCafe,boolean isVendingMachine){
     	this.id=id;
     	this.location=location;
     	this.xPosition=xPosition;
     	this.yposition=yPosition;
+    	this.isCafe=isCafe;
+    	this.isVendingMachine=isVendingMachine;
     }
     
-    public FoodJoint(){
+    public FoodJointService(){
     	
     }
     
-    public FoodJoint(int id){
+    public FoodJointService(int id){
+    	//remove this constructor
     	this.id=id;
-    	getLocation(id);
+    	this.getLocation(id);
     	
     }
     
     public int getId(){
     	return this.id;
     }
+    
+    public boolean getIsVendingMachine(){
+    	return this.isVendingMachine;
+    }
+    
+    
+    public boolean getIsCafe(){
+    	return this.isCafe;
+    }
+    
+    public int getXPostion(){
+    	return this.xPosition;
+    }
+    
+    public int getYPostion(){
+    	return this.yposition;
+    }
+    
     
     private void getLocation(int id) {
 		// TODO Auto-generated method stub
@@ -60,6 +84,11 @@ abstract public class FoodJoint {
 	public String getLocation(){
     	return this.location;
     }
+	
+	protected abstract void createTransaction(ArrayList<FoodItem> foodItems);
+	
+	//called by gui
+	public abstract ArrayList<FoodItem> displayItems();
     
     //Template pattern
 	public boolean validateAndCreateTransaction(ArrayList<FoodItem> foodItems){
@@ -93,11 +122,6 @@ abstract public class FoodJoint {
 		}
 		return false;
 	}
-	
-	protected abstract void createTransaction(ArrayList<FoodItem> foodItems);
-	public abstract ArrayList<FoodItem> displayItems();
-	
-	
 	
 	private void updateProfile(){
 		FoodPreference preferencesForValidation=new FoodPreference(CurrentSession.getCurrentUser().getCardNumber());

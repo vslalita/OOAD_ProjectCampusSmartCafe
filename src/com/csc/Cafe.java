@@ -5,13 +5,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.csc.Model.FoodItem;
-import com.csc.Model.FoodPurchaseTransaction;
+import com.csc.model.FoodItem;
+import com.csc.model.FoodPurchaseTransaction;
 
-public class Cafe extends FoodJoint {
+public class Cafe extends FoodJointService {
 
-	public Cafe(int id,String location,int xPosition,int yPosition) {
-		super(id, location,xPosition,yPosition);
+	public Cafe(int id,String location,int xPosition,int yPosition,boolean isCafe,boolean isVendingMachine) {
+		super(id, location,xPosition,yPosition,isCafe,isVendingMachine);
 		// TODO Auto-generated constructor stub
 	}
 	

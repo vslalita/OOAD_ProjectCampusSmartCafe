@@ -16,8 +16,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
 import com.csc.CurrentSession;
-import com.csc.Model.FoodItem;
-import com.csc.Model.FoodPurchaseTransaction;
+import com.csc.model.FoodItem;
+import com.csc.model.FoodPurchaseTransaction;
 
 /**
  *

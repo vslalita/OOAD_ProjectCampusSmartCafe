@@ -1,4 +1,4 @@
-package com.csc.Model;
+package com.csc.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import java.util.Date;
 import com.csc.Cafe;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
-import com.csc.FoodJoint;
+import com.csc.FoodJointService;
 
 public class User {
 	private int id;
@@ -88,7 +88,7 @@ public class User {
 				int id=unpickedOrdersQueryResult.getInt("id");
 				ArrayList<FoodItem> unpickedOrderedItems=getOrderItems(id);
 				String cardNumber=unpickedOrdersQueryResult.getString("card_number");
-				FoodJoint foodJoint=new Cafe(unpickedOrdersQueryResult.getInt("food_joint_id"));
+				FoodJointService foodJoint=new Cafe(unpickedOrdersQueryResult.getInt("food_joint_id"));
 				FoodPurchaseTransaction order=new FoodPurchaseTransaction(id,unpickedOrderedItems,cardNumber,foodJoint);
 				//order.setStatus(unpickedOrdersQueryResult.getString("status"));
 				unpickedOrders.add(order);
@@ -144,6 +144,7 @@ public class User {
 	}
 
 	public void updateRemainingExpenses(){
+		//TODO change variable name to available balance
 		DateFormat dateFormatForExpenses = new SimpleDateFormat("yyyy-MM");
 		Date dateObj = new Date();
 		int amountSpentForTheCurrentMonth=0;

@@ -1,4 +1,4 @@
-package com.csc.Model;
+package com.csc.model;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -12,25 +12,25 @@ import java.util.Calendar;
 import com.csc.Cafe;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
-import com.csc.FoodJoint;
+import com.csc.FoodJointService;
 
 public class FoodPurchaseTransaction {
 
 	private int id;
 	private ArrayList<FoodItem> foodItems=new ArrayList<FoodItem>();
 	private String status;
-	private FoodJoint foodJoint;
+	private FoodJointService foodJoint;
 	private String cardNumber;
 	private Date date;
 
-	public FoodPurchaseTransaction(int id,ArrayList<FoodItem> foodItems,String cardNumber,FoodJoint foodJoint){
+	public FoodPurchaseTransaction(int id,ArrayList<FoodItem> foodItems,String cardNumber,FoodJointService foodJoint){
 		this.id=id;
 		this.foodItems=foodItems;
 		this.cardNumber=cardNumber;
 		this.foodJoint=foodJoint;
 	}
 	
-	public FoodPurchaseTransaction(ArrayList<FoodItem> foodItems,String cardNumber,FoodJoint foodJoint){
+	public FoodPurchaseTransaction(ArrayList<FoodItem> foodItems,String cardNumber,FoodJointService foodJoint){
 		this.foodItems=foodItems;
 		this.cardNumber=cardNumber;
 		this.foodJoint=foodJoint;
@@ -70,7 +70,7 @@ public class FoodPurchaseTransaction {
 		this.status=status;
 	}
 
-	public void setFoodJoint(FoodJoint foodJoint){
+	public void setFoodJoint(FoodJointService foodJoint){
 		this.foodJoint=foodJoint;
 	}
 	
@@ -78,7 +78,7 @@ public class FoodPurchaseTransaction {
 		return this.id;
 	}
 
-	public FoodJoint getFoodJoint(){
+	public FoodJointService getFoodJoint(){
 		return this.foodJoint;
 	}
 	

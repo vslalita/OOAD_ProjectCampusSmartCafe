@@ -1,4 +1,4 @@
-package com.csc.Model;
+package com.csc.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

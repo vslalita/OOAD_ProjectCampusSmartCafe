@@ -7,24 +7,26 @@ import java.util.ArrayList;
 
 public class CSCApplication {
     //TODO add this method to FoodJoint
-	public ArrayList<FoodJoint> getAllFoodJoints(){
-		ArrayList<FoodJoint> foodJoints=new ArrayList<FoodJoint>();
+	public ArrayList<FoodJointService> getAllFoodJoints(){
+		ArrayList<FoodJointService> foodJoints=new ArrayList<FoodJointService>();
 		try {
 			Statement foodJointsQueryStatement=DatabaseConnection.connectionRequest().createStatement();
 			String foodJointQuery="Select * from food_joint";
 			ResultSet foodJointQueryResult=foodJointsQueryStatement.executeQuery(foodJointQuery);
 			while(foodJointQueryResult.next()){
-				FoodJoint foodJoint;
+				FoodJointService foodJoint;
 				int id=foodJointQueryResult.getInt("id");
 				String location=foodJointQueryResult.getString("location_address");
 				int xPosition=foodJointQueryResult.getInt("x_position");
 				int yPosition=foodJointQueryResult.getInt("y_position");
+				boolean isVendingMachine=foodJointQueryResult.getBoolean("is_vending_machine");
+				boolean isCafe=foodJointQueryResult.getBoolean("is_cafe");
 				if(foodJointQueryResult.getBoolean("is_vending_machine")){
-					foodJoint=new VendingMachine(id,location,xPosition,yPosition);
+					foodJoint=new VendingMachineService(id,location,xPosition,yPosition,isVendingMachine,isCafe);
 					foodJoints.add(foodJoint);
 				}
 				if(foodJointQueryResult.getBoolean("is_cafe")){
-					foodJoint=new Cafe(id,location,xPosition,yPosition);
+					foodJoint=new Cafe(id,location,xPosition,yPosition,isVendingMachine,isCafe);
 					foodJoints.add(foodJoint);
 				}
 			}
