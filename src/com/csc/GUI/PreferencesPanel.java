@@ -3,6 +3,8 @@ package com.csc.GUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JLabel;
+
 import com.csc.CurrentSession;
 import com.csc.Model.FoodPreference;
 
@@ -12,9 +14,10 @@ import com.csc.Model.FoodPreference;
  */
 public class PreferencesPanel extends javax.swing.JPanel {
 
-
-	public PreferencesPanel() {
+   JLabel jLabel5;
+	public PreferencesPanel(JLabel remainingFundsLabel) {
 		initComponents();
+		this.jLabel5=remainingFundsLabel;
 	}
 
 	/**
@@ -56,10 +59,10 @@ public class PreferencesPanel extends javax.swing.JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				int calories=Integer.parseInt(jTextField1.getText());
-				FoodPreference preference=new FoodPreference(CurrentSession.getCurrentUser().getCardNumber(),calories);
-			    preference.save();
+				FoodPreference preference=new FoodPreference(CurrentSession.getCurrentUser().getCardNumber());
+			    preference.save(calories);
+			    jLabel5.setText("Remaining Calories:"+preference.getRemainingCalories());
 			}
-			
 		});
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

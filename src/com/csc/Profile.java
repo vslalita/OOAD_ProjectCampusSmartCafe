@@ -13,7 +13,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
 public class Profile {
-	
+	//TODO add it in user class
 	public PieDataset getDietaryStatistics(){
 		DateFormat dateFormatForCalories = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal1 = Calendar.getInstance();

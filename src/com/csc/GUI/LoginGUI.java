@@ -17,7 +17,7 @@ public class LoginGUI extends JFrame {
 	JPanel panel = new JPanel();
 	JTextField cardNumberTextField = new JTextField(15);
 
-	LoginGUI(){
+	public LoginGUI(){
 		super("Login Authentication");
 		setSize(300,200);
 		setLocation(500,280);

@@ -20,7 +20,6 @@ public class User {
 	private String cardNumber;
 	private int expenses;
 	private int expenses_remaining;
-	
 
 	public User(int id,String firstName,String lastName, String cardNumber){
 		this.id=id;
@@ -132,7 +131,7 @@ public class User {
 
 	public void updateExpenses(int expense){
 		try {
-			this.expenses=expense;
+			this.expenses=this.expenses+expense;
 			Statement updateExpenseStatement=DatabaseConnection.connectionRequest().createStatement();
 			String updateExpenseQuery="update user set expenses="+expense+" where card_number="+this.cardNumber;
 			updateExpenseStatement.executeUpdate(updateExpenseQuery);
@@ -175,8 +174,6 @@ public class User {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-
 	}
 
 	public int getExpenses() {

@@ -8,6 +8,8 @@ package com.csc.GUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JLabel;
+
 import com.csc.CurrentSession;
 
 /**
@@ -19,8 +21,11 @@ public class ExpensesFormGUI extends javax.swing.JPanel {
     /**
      * Creates new form ExpensesFormPanel
      */
-    public ExpensesFormGUI() {
+	JLabel jLabel6;
+	
+    public ExpensesFormGUI(JLabel jLabel6) {
         initComponents();
+        this.jLabel6=jLabel6;
     }
 
     /**
@@ -54,6 +59,7 @@ public class ExpensesFormGUI extends javax.swing.JPanel {
 				// TODO Auto-generated method stub
 				int expenses=Integer.parseInt(jTextField1.getText());
 				CurrentSession.getCurrentUser().updateExpenses(expenses);
+				jLabel6.setText("Funds Remaining for this Month:"+CurrentSession.getCurrentUser().getRemainingExpenses());
 			}
         	
         });

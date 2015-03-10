@@ -92,7 +92,7 @@ public class FoodPurchaseTransaction {
 			}
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar cal1 = Calendar.getInstance();
-			String orderInsertionQuery="insert into food_order_transaction(food_joint_id,status,card_number,amount,created_on) values ("+CurrentSession.getMachine()+",'"+this.status+"','"+CurrentSession.getCurrentUser().getCardNumber()+"',"+price+",'"+dateFormat.format(cal1.getTime())+"')";
+			String orderInsertionQuery="insert into food_order_transaction(food_joint_id,status,card_number,amount,created_on) values ("+CurrentSession.getMachine().getId()+",'"+this.status+"','"+CurrentSession.getCurrentUser().getCardNumber()+"',"+price+",'"+dateFormat.format(cal1.getTime())+"')";
 			int insertionQueryResult=orderInsertionStatement.executeUpdate(orderInsertionQuery,Statement.RETURN_GENERATED_KEYS);
 			if(insertionQueryResult>0){
 				ResultSet rs=orderInsertionStatement.getGeneratedKeys();

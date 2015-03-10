@@ -6,7 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class CSCApplication {
-
+    //TODO add this method to FoodJoint
 	public ArrayList<FoodJoint> getAllFoodJoints(){
 		ArrayList<FoodJoint> foodJoints=new ArrayList<FoodJoint>();
 		try {

@@ -35,6 +35,10 @@ abstract public class FoodJoint {
     	
     }
     
+    public int getId(){
+    	return this.id;
+    }
+    
     private void getLocation(int id) {
 		// TODO Auto-generated method stub
     	Statement foodJointsStatement;
@@ -89,8 +93,12 @@ abstract public class FoodJoint {
 		}
 		return false;
 	}
+	
 	protected abstract void createTransaction(ArrayList<FoodItem> foodItems);
 	public abstract ArrayList<FoodItem> displayItems();
+	
+	
+	
 	private void updateProfile(){
 		FoodPreference preferencesForValidation=new FoodPreference(CurrentSession.getCurrentUser().getCardNumber());
 		preferencesForValidation.updateRemainingCalories();

@@ -21,16 +21,18 @@ public class FoodPreference {
    
    public FoodPreference(String cardnumber){
 	   this.cardNumber=cardnumber;
+	   this.calories=getUserCalories();
    }
    
-   public void save(){
+   public void save(int caloriesToBeAdded){
 	   try {
 		Statement preferenceStatement=DatabaseConnection.connectionRequest().createStatement();
 		String preferenceQuery="Select count(*) from food_preferences where card_number='"+this.cardNumber+"'";
 		ResultSet preferenceQueryResult=preferenceStatement.executeQuery(preferenceQuery);
 		if(preferenceQueryResult.next()){
 			if(preferenceQueryResult.getInt("count(*)")>0){
-				String query="update food_preferences set calories="+this.calories+" where card_number='"+this.cardNumber+"'";
+			    caloriesToBeAdded=this.calories+caloriesToBeAdded;
+				String query="update food_preferences set calories="+caloriesToBeAdded+" where card_number='"+this.cardNumber+"'";
 				preferenceStatement.executeUpdate(query);
 			}
 			else{
