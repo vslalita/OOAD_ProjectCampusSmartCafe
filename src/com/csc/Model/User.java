@@ -8,8 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.csc.Cafe;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
+import com.csc.FoodJoint;
 
 public class User {
 	private int id;
@@ -17,6 +19,8 @@ public class User {
 	private String lastName;
 	private String cardNumber;
 	private int expenses;
+	private int expenses_remaining;
+	
 
 	public User(int id,String firstName,String lastName, String cardNumber){
 		this.id=id;
@@ -67,20 +71,26 @@ public class User {
 		return this.cardNumber;
 	}
 
+	
+	public int getRemainingExpenses(){
+		updateRemainingExpenses();
+		return this.expenses_remaining;
+	}
+	
 	public ArrayList<FoodPurchaseTransaction> getUnpickedOrders(){
 		ArrayList<FoodPurchaseTransaction> unpickedOrders=new ArrayList<FoodPurchaseTransaction>();
 		Statement unpickedOrdersStatement;
 		try {
 			unpickedOrdersStatement = DatabaseConnection.connectionRequest().createStatement();
 			//TODO include condition for date and time of the 
-			String unpickedOrdersQuery="Select * from food_order_transaction where status='Ordered'";
+			String unpickedOrdersQuery="Select * from food_order_transaction where status='Ordered' and card_number='"+this.cardNumber+"'";
 			ResultSet unpickedOrdersQueryResult=unpickedOrdersStatement.executeQuery(unpickedOrdersQuery);
 			while(unpickedOrdersQueryResult.next()){
 				int id=unpickedOrdersQueryResult.getInt("id");
 				ArrayList<FoodItem> unpickedOrderedItems=getOrderItems(id);
 				String cardNumber=unpickedOrdersQueryResult.getString("card_number");
-				int locationId=unpickedOrdersQueryResult.getInt("location_id");
-				FoodPurchaseTransaction order=new FoodPurchaseTransaction(id,unpickedOrderedItems,cardNumber,locationId);
+				FoodJoint foodJoint=new Cafe(unpickedOrdersQueryResult.getInt("food_joint_id"));
+				FoodPurchaseTransaction order=new FoodPurchaseTransaction(id,unpickedOrderedItems,cardNumber,foodJoint);
 				//order.setStatus(unpickedOrdersQueryResult.getString("status"));
 				unpickedOrders.add(order);
 			}
@@ -99,7 +109,7 @@ public class User {
 			String orderFoodItemQuery="Select * from food_order_transaction_lines where order_id="+orderId;
 			ResultSet orderFoodItemQueryResult=orderFoodItemStatement.executeQuery(orderFoodItemQuery);
 			while(orderFoodItemQueryResult.next()){
-				FoodItem item=getFoodItem(orderFoodItemQueryResult.getInt("item_id"));
+				FoodItem item=new FoodItem(orderFoodItemQueryResult.getInt("item_id"));
 				foodItem.add(item);
 			}
 		} catch (SQLException e) {
@@ -110,31 +120,14 @@ public class User {
 		return foodItem;
 	}
 
-	private FoodItem getFoodItem(int itemId) {
-		// TODO Auto-generated method stub
-		FoodItem item=null;
-		Statement foodItemQueryStatement;
-		try {
-			foodItemQueryStatement=DatabaseConnection.connectionRequest().createStatement();
-			String foodItemQuery="Select * from food_item where id="+itemId;
-			ResultSet foodItemQueryResult=foodItemQueryStatement.executeQuery(foodItemQuery);
-			while(foodItemQueryResult.next()){
-				int id=foodItemQueryResult.getInt("id");
-				String itemName=foodItemQueryResult.getString("name");
-				int price =foodItemQueryResult.getInt("price");
-				int calories=foodItemQueryResult.getInt("calories");
-				item=new FoodItem(id,itemName,price,calories);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return item;
-	}
-
-	public void pickUpOrder(FoodPurchaseTransaction transaction){
+	public boolean pickUpOrder(FoodPurchaseTransaction transaction){
 		transaction.setStatus("Delivered");
-		transaction.update();
+		if(transaction.update()){
+		  return true;	
+		}
+		else{
+			return false;
+		}
 	}
 
 	public void updateExpenses(int expense){
@@ -160,7 +153,8 @@ public class User {
 			updateProfileStatement = DatabaseConnection.connectionRequest().createStatement();
 			String ordersAmountQuery="Select fot.amount,fot.created_on "
 					+ "                 from food_order_transaction fot"
-					+ "                 where fot.created_on like '"+dateFormatForExpenses.format(dateObj)+"%'";
+					+ "                 where fot.created_on like '"+dateFormatForExpenses.format(dateObj)+"%'"
+							+ "           and fot.card_number="+this.cardNumber;
 			ResultSet ordersAmountQueryResult=updateProfileStatement.executeQuery(ordersAmountQuery);
 			while(ordersAmountQueryResult.next()){
 				amountSpentForTheCurrentMonth=amountSpentForTheCurrentMonth+ordersAmountQueryResult.getInt("amount");
@@ -174,7 +168,8 @@ public class User {
 				fundsRemaining=CurrentSession.getCurrentUser().getExpenses()-amountSpentForTheCurrentMonth;
 			}
 
-			String query="update user set expenses_remaining="+fundsRemaining+" where card_number='"+CurrentSession.getCurrentUser().getCardNumber()+"'";
+			String query="update user set expenses_remaining="+fundsRemaining+" where card_number='"+this.cardNumber+"'";
+			this.expenses_remaining=fundsRemaining;
 			updateProfileStatement.executeUpdate(query);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

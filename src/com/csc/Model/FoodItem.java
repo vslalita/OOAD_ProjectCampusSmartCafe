@@ -1,5 +1,11 @@
 package com.csc.Model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import com.csc.DatabaseConnection;
+
 public class FoodItem {
 	private int id;
 	private String itemName;
@@ -14,6 +20,11 @@ public class FoodItem {
 		this.price=price;
 		this.calories=calories;
 
+	}
+	
+	public FoodItem(int id){
+		this.id=id;
+		getFoodItem(id);
 	}
 
 	public String getItemName() {
@@ -30,5 +41,23 @@ public class FoodItem {
 
 	public int getId() {
 		return id;
+	}
+	
+	private void getFoodItem(int itemId) {
+		// TODO Auto-generated method stub
+		Statement foodItemQueryStatement;
+		try {
+			foodItemQueryStatement=DatabaseConnection.connectionRequest().createStatement();
+			String foodItemQuery="Select * from food_item where id="+itemId;
+			ResultSet foodItemQueryResult=foodItemQueryStatement.executeQuery(foodItemQuery);
+			while(foodItemQueryResult.next()){
+				this.itemName=foodItemQueryResult.getString("name");
+				this.price =foodItemQueryResult.getInt("price");
+				this.calories=foodItemQueryResult.getInt("calories");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

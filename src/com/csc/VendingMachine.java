@@ -10,20 +10,22 @@ import com.csc.Model.FoodPurchaseTransaction;
 
 public class VendingMachine extends FoodJoint {
 
-	public VendingMachine(FoodPurchaseTransaction transaction, int locationId) {
-		super(transaction, locationId);
-		// TODO Auto-generated constructor stub
+	public VendingMachine(int id,String location,int xPosition,int yPosition) {
+		super(id, location,xPosition,yPosition);
 	}
 	
 	public VendingMachine(){
-		
+	}
+	
+	public VendingMachine(int id){
+		super(id);
 	}
 
 	@Override
 	protected void createTransaction(ArrayList<FoodItem> foodItems) {
 		// TODO create a transaction. Implementation involves immediate delivery of the item.
 		if(foodItems.size()>0){
-			FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,CurrentSession.getCurrentUser().getCardNumber(),1);
+			FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,CurrentSession.getCurrentUser().getCardNumber(),CurrentSession.getMachine());
 			transaction.setStatus("Delivered");
 			transaction.createTransaction();
 		}
@@ -55,5 +57,4 @@ public class VendingMachine extends FoodJoint {
 		}
 		return foodItems;
 	}
-
 }

@@ -23,7 +23,6 @@ public class LoginGUI extends JFrame {
 		setLocation(500,280);
 		panel.setLayout (null); 
 
-
 		cardNumberTextField.setBounds(70,30,150,20);
 		blogin.setBounds(110,100,80,20);
 
@@ -46,6 +45,11 @@ public class LoginGUI extends JFrame {
 						 JFrame homeFrame =new HomPageGUI();
 						 homeFrame.setVisible(true);
 						 dispose();
+					 }
+					 else{
+						 JOptionPane.showMessageDialog(null,"This card does not exist");
+							cardNumberTextField.setText("");
+							cardNumberTextField.requestFocus();
 					 }
 				} 
 				else {

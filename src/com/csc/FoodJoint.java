@@ -13,16 +13,48 @@ import com.csc.Model.FoodPreference;
 import com.csc.Model.FoodPurchaseTransaction;
 
 abstract public class FoodJoint {
-    protected FoodPurchaseTransaction transaction;
-    protected int locationId;
+    private int id;
+	protected String location;
+	private int xPosition;
+	private int yposition;
     
-    public FoodJoint(FoodPurchaseTransaction transaction,int locationId){
-    	this.transaction=transaction;
-    	this.locationId=locationId;
+    public FoodJoint(int id,String location,int xPosition,int yPosition){
+    	this.id=id;
+    	this.location=location;
+    	this.xPosition=xPosition;
+    	this.yposition=yPosition;
     }
     
     public FoodJoint(){
     	
+    }
+    
+    public FoodJoint(int id){
+    	this.id=id;
+    	getLocation(id);
+    	
+    }
+    
+    private void getLocation(int id) {
+		// TODO Auto-generated method stub
+    	Statement foodJointsStatement;
+		try {
+			foodJointsStatement = DatabaseConnection.connectionRequest().createStatement();
+			String foodJointsQuery="Select * from food_joint where id="+id;
+			ResultSet foodJointsQueryResult=foodJointsStatement.executeQuery(foodJointsQuery);
+			while(foodJointsQueryResult.next()){
+				this.location=foodJointsQueryResult.getString("location_address");
+				this.xPosition=foodJointsQueryResult.getInt("x_position");
+				this.yposition=foodJointsQueryResult.getInt("y_position");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String getLocation(){
+    	return this.location;
     }
     
     //Template pattern

@@ -55,6 +55,7 @@ public class FoodPreference {
 				+ "                 from food_order_transaction fot,food_order_transaction_lines fotl, food_item fi "
 				+ "                 where fotl.item_id=fi.id "
 				+ "                   and fot.id=fotl.order_id"
+				+"                    and fot.card_number='"+this.cardNumber+"'"
 				+ "                   and fot.created_on like '"+dateFormatForCalories.format(dateObj)+"%'";
 		ResultSet orderItemsCaloriesResult=updateProfileStatement.executeQuery(orderItemsCaloriesQuery);
 		int caloriesSpent=0;

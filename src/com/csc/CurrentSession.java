@@ -9,7 +9,7 @@ import com.csc.Model.User;
 public class CurrentSession {
 	//currentUser holds the information of the member who is currently logged in
 	private static  User currentUser;
-	public static FoodJoint currentMachine=new VendingMachine();
+	private static FoodJoint currentMachine=new Cafe(2);
 	private static CurrentSession currentSession=null;
 	private CurrentSession(User user){
 		currentUser=user;
@@ -31,6 +31,16 @@ public class CurrentSession {
 		}
 	}
 
+	public static void setMachine(FoodJoint joint){
+		if(currentMachine==null){
+			currentMachine=joint;
+		}
+	}
+	
+	public static FoodJoint getMachine(){
+		return currentMachine;
+	}
+	
 	public static User getCurrentUser(){
 		if(currentSession!=null && currentUser!=null){
 			return currentUser;

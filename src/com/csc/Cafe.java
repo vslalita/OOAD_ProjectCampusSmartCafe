@@ -10,15 +10,19 @@ import com.csc.Model.FoodPurchaseTransaction;
 
 public class Cafe extends FoodJoint {
 
-	public Cafe(FoodPurchaseTransaction transaction, int locationId) {
-		super(transaction, locationId);
+	public Cafe(int id,String location,int xPosition,int yPosition) {
+		super(id, location,xPosition,yPosition);
 		// TODO Auto-generated constructor stub
+	}
+	
+	public Cafe(int id){
+		super(id);
 	}
 
 	@Override
 	protected void createTransaction(ArrayList<FoodItem> foodItems) {
 		// TODO creates the transaction by setting status and the pickup location.
-		FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,CurrentSession.getCurrentUser().getCardNumber(),this.locationId);
+		FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,CurrentSession.getCurrentUser().getCardNumber(),this);
 		transaction.setStatus("Ordered");
 		transaction.createTransaction();
 	}
