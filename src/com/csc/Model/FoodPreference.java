@@ -24,15 +24,24 @@ public class FoodPreference {
 	   this.calories=getUserCalories();
    }
    
-   public void save(int caloriesToBeAdded){
+   public void save(int caloriesToBeModified,String action){
 	   try {
 		Statement preferenceStatement=DatabaseConnection.connectionRequest().createStatement();
 		String preferenceQuery="Select count(*) from food_preferences where card_number='"+this.cardNumber+"'";
 		ResultSet preferenceQueryResult=preferenceStatement.executeQuery(preferenceQuery);
 		if(preferenceQueryResult.next()){
 			if(preferenceQueryResult.getInt("count(*)")>0){
-			    caloriesToBeAdded=this.calories+caloriesToBeAdded;
-				String query="update food_preferences set calories="+caloriesToBeAdded+" where card_number='"+this.cardNumber+"'";
+				if(action.equals("add")){
+					this.calories=this.calories+caloriesToBeModified;
+				}
+				if(action.equals("reduce")){
+					if(caloriesToBeModified<this.calories && caloriesToBeModified<=getRemainingCalories()){
+						this.calories=this.calories-caloriesToBeModified;
+						int x=this.calories;
+					}
+				}
+				
+				String query="update food_preferences set calories="+this.calories+" where card_number='"+this.cardNumber+"'";
 				preferenceStatement.executeUpdate(query);
 			}
 			else{

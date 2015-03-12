@@ -16,13 +16,15 @@ abstract public class FoodJointService {
     private int id;
     //TODO include property name
 	protected String location;
+	private String name;
 	private int xPosition;
 	private int yposition;
 	private boolean isCafe;
 	private boolean isVendingMachine;
     
-    public FoodJointService(int id,String location,int xPosition,int yPosition,boolean isCafe,boolean isVendingMachine){
+    public FoodJointService(int id,String name,String location,int xPosition,int yPosition,boolean isCafe,boolean isVendingMachine){
     	this.id=id;
+    	this.name=name;
     	this.location=location;
     	this.xPosition=xPosition;
     	this.yposition=yPosition;
@@ -30,6 +32,10 @@ abstract public class FoodJointService {
     	this.isVendingMachine=isVendingMachine;
     }
     
+    
+    public String getName(){
+    	return this.name;
+    }
     public FoodJointService(){
     	
     }
@@ -107,15 +113,19 @@ abstract public class FoodJointService {
 		updateProfile();
 		if(items!=null&&items.size()>0){
 			int calories=0;
+			int amount=0;
 			for(int i=0;i<items.size();i++){
 				calories=calories+items.get(i).getCalories();
+				amount=amount+items.get(i).getPrice();
 			}
 			
+			int expenses=CurrentSession.getCurrentUser().getExpenses();
+			int availableBalance=CurrentSession.getCurrentUser().getRemainingExpenses();
 			FoodPreference caloriePreference=new FoodPreference(CurrentSession.getCurrentUser().getCardNumber());
 			int userDailyIntakeCalories=caloriePreference.getUserCalories();
 			int remainingIntakeCalories=caloriePreference.getRemainingCalories();
-			if((remainingIntakeCalories>0)&&userDailyIntakeCalories>0){
-				if(calories<=remainingIntakeCalories&&calories<=userDailyIntakeCalories){
+			if((remainingIntakeCalories>0)&&(userDailyIntakeCalories>0)&&(expenses>0)&&(availableBalance>0)){
+				if((calories<=remainingIntakeCalories)&&(calories<=userDailyIntakeCalories)&&(amount<=availableBalance)&&(amount<=expenses)){
 					return true;
 				}
 			}

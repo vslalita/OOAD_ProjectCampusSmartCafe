@@ -76,13 +76,23 @@ public class User {
 		return this.expenses_remaining;
 	}
 	
+	public int getExpenses() {
+		return expenses;
+	}
+
+	public void setExpenses(int expenses){
+		this.expenses=expenses;
+	}
+	
 	public ArrayList<FoodPurchaseTransaction> getUnpickedOrders(){
 		ArrayList<FoodPurchaseTransaction> unpickedOrders=new ArrayList<FoodPurchaseTransaction>();
 		Statement unpickedOrdersStatement;
 		try {
 			unpickedOrdersStatement = DatabaseConnection.connectionRequest().createStatement();
 			//TODO include condition for date and time of the 
-			String unpickedOrdersQuery="Select * from food_order_transaction where status='Ordered' and card_number='"+this.cardNumber+"'";
+			String unpickedOrdersQuery="Select * from food_order_transaction where status='Ordered' "
+					+ "and card_number='"+this.cardNumber+"'"
+							+ "and food_joint_id="+CurrentSession.getMachine().getId();
 			ResultSet unpickedOrdersQueryResult=unpickedOrdersStatement.executeQuery(unpickedOrdersQuery);
 			while(unpickedOrdersQueryResult.next()){
 				int id=unpickedOrdersQueryResult.getInt("id");
@@ -129,9 +139,17 @@ public class User {
 		}
 	}
 
-	public void updateExpenses(int expense){
+	public void updateExpenses(int expense,String action){
 		try {
-			this.expenses=this.expenses+expense;
+			if(action.equals("add")){
+				this.expenses=this.expenses+expense;
+			}
+			if(action.equals("reduce")){
+				int amountRemaining=getRemainingExpenses();
+				if(expense<this.expenses &&expense<amountRemaining){
+					this.expenses=this.expenses-expense;
+				}
+			}
 			Statement updateExpenseStatement=DatabaseConnection.connectionRequest().createStatement();
 			String updateExpenseQuery="update user set expenses="+expense+" where card_number="+this.cardNumber;
 			updateExpenseStatement.executeUpdate(updateExpenseQuery);
@@ -177,11 +195,4 @@ public class User {
 		}
 	}
 
-	public int getExpenses() {
-		return expenses;
-	}
-
-	public void setExpenses(int expenses){
-		this.expenses=expenses;
-	}
 }

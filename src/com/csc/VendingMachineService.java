@@ -15,10 +15,10 @@ public class VendingMachineService extends FoodJointService {
 	}
 	
 	
-	public VendingMachineService(int id, String location, int xPosition,
+	public VendingMachineService(int id, String name,String location, int xPosition,
 			int yPosition,boolean isCafe,boolean isVendingMachine) {
 		// TODO Auto-generated constructor stub
-		super(id, location, xPosition,
+		super(id, name,location, xPosition,
 			yPosition,isCafe,isVendingMachine);
 	}
 

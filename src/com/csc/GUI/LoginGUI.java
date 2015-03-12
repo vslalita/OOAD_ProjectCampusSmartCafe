@@ -16,16 +16,18 @@ public class LoginGUI extends JFrame {
 	JButton blogin = new JButton("Enter");
 	JPanel panel = new JPanel();
 	JTextField cardNumberTextField = new JTextField(15);
+    JLabel enterCardNumberLabel=new JLabel("Enter Card Number");
 
 	public LoginGUI(){
 		super("Login Authentication");
-		setSize(300,200);
+		setSize(500,500);
 		setLocation(500,280);
 		panel.setLayout (null); 
-
-		cardNumberTextField.setBounds(70,30,150,20);
+		enterCardNumberLabel.setBounds(50,30,150,20);
+		cardNumberTextField.setBounds(170,30,150,20);
 		blogin.setBounds(110,100,80,20);
-
+        
+		panel.add(enterCardNumberLabel);
 		panel.add(blogin);
 		panel.add(cardNumberTextField);
 
