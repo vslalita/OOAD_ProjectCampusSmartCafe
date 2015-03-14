@@ -1,93 +1,17 @@
 package com.csc;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.csc.model.FoodItem;
 import com.csc.model.FoodPreference;
-import com.csc.model.FoodPurchaseTransaction;
 
 abstract public class FoodJointService {
-    private int id;
-    //TODO include property name
-	protected String location;
-	private int xPosition;
-	private int yposition;
-	private boolean isCafe;
-	private boolean isVendingMachine;
-    
-    public FoodJointService(int id,String location,int xPosition,int yPosition,boolean isCafe,boolean isVendingMachine){
-    	this.id=id;
-    	this.location=location;
-    	this.xPosition=xPosition;
-    	this.yposition=yPosition;
-    	this.isCafe=isCafe;
-    	this.isVendingMachine=isVendingMachine;
-    }
     
     public FoodJointService(){
-    	
-    }
-    
-    public FoodJointService(int id){
-    	//remove this constructor
-    	this.id=id;
-    	this.getLocation(id);
-    	
-    }
-    
-    public int getId(){
-    	return this.id;
-    }
-    
-    public boolean getIsVendingMachine(){
-    	return this.isVendingMachine;
-    }
-    
-    
-    public boolean getIsCafe(){
-    	return this.isCafe;
-    }
-    
-    public int getXPostion(){
-    	return this.xPosition;
-    }
-    
-    public int getYPostion(){
-    	return this.yposition;
-    }
-    
-    
-    private void getLocation(int id) {
-		// TODO Auto-generated method stub
-    	Statement foodJointsStatement;
-		try {
-			foodJointsStatement = DatabaseConnection.connectionRequest().createStatement();
-			String foodJointsQuery="Select * from food_joint where id="+id;
-			ResultSet foodJointsQueryResult=foodJointsStatement.executeQuery(foodJointsQuery);
-			while(foodJointsQueryResult.next()){
-				this.location=foodJointsQueryResult.getString("location_address");
-				this.xPosition=foodJointsQueryResult.getInt("x_position");
-				this.yposition=foodJointsQueryResult.getInt("y_position");
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public String getLocation(){
-    	return this.location;
     }
 	
 	protected abstract void createTransaction(ArrayList<FoodItem> foodItems);
 	
-	//called by gui
 	public abstract ArrayList<FoodItem> displayItems();
     
     //Template pattern
@@ -107,15 +31,29 @@ abstract public class FoodJointService {
 		updateProfile();
 		if(items!=null&&items.size()>0){
 			int calories=0;
+			int amount=0;
+			FoodPreference fp=new FoodPreference();
+			fp.setPrefDeatilsByCardNumber(CurrentSession.getCurrentUser().getCardNumber());
 			for(int i=0;i<items.size();i++){
-				calories=calories+items.get(i).getCalories();
+				FoodItem item=items.get(i);
+				if((fp.isLowFat()&&item.isLowFat())||(fp.isLowSodium()&&item.isLowSodium())||(!fp.isLowFat()&&!fp.isLowSodium())){
+					calories=calories+items.get(i).getCalories();
+					amount=amount+items.get(i).getPrice();
+				}
+				else{
+					return false;
+				}
+				
 			}
 			
-			FoodPreference caloriePreference=new FoodPreference(CurrentSession.getCurrentUser().getCardNumber());
-			int userDailyIntakeCalories=caloriePreference.getUserCalories();
+			int expenses=CurrentSession.getCurrentUser().getExpenses();
+			int availableBalance=CurrentSession.getCurrentUser().getRemainingExpenses();
+			FoodPreference caloriePreference=new FoodPreference();
+			caloriePreference.setPrefDeatilsByCardNumber(CurrentSession.getCurrentUser().getCardNumber());
+			int userDailyIntakeCalories=caloriePreference.getCalories();
 			int remainingIntakeCalories=caloriePreference.getRemainingCalories();
-			if((remainingIntakeCalories>0)&&userDailyIntakeCalories>0){
-				if(calories<=remainingIntakeCalories&&calories<=userDailyIntakeCalories){
+			if((remainingIntakeCalories>0)&&(userDailyIntakeCalories>0)&&(expenses>0)&&(availableBalance>0)){
+				if((calories<=remainingIntakeCalories)&&(calories<=userDailyIntakeCalories)&&(amount<=availableBalance)&&(amount<=expenses)){
 					return true;
 				}
 			}
@@ -124,7 +62,8 @@ abstract public class FoodJointService {
 	}
 	
 	private void updateProfile(){
-		FoodPreference preferencesForValidation=new FoodPreference(CurrentSession.getCurrentUser().getCardNumber());
+		FoodPreference preferencesForValidation=new FoodPreference();
+		preferencesForValidation.setPrefDeatilsByCardNumber(CurrentSession.getCurrentUser().getCardNumber());
 		preferencesForValidation.updateRemainingCalories();
 		CurrentSession.getCurrentUser().updateRemainingExpenses();
 		

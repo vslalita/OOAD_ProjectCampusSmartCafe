@@ -11,15 +11,18 @@ public class FoodItem {
 	private String itemName;
 	private int price;
 	private int calories;
+	private boolean lowSodium;
+	private boolean lowFat;
 	//   private boolean existsInVendingMachine;
 	//   private boolean existsInCafe;
 
-	public FoodItem(int id,String itemName, int price, int calories){
+	public FoodItem(int id,String itemName, int price, int calories,boolean low_sodium,boolean low_fat){
 		this.id=id;
 		this.itemName=itemName;
 		this.price=price;
 		this.calories=calories;
-
+		this.setLowFat(low_fat);
+		this.setLowSodium(low_sodium);
 	}
 	
 	public FoodItem(int id){
@@ -43,6 +46,7 @@ public class FoodItem {
 		return id;
 	}
 	
+	
 	private void getFoodItem(int itemId) {
 		// TODO Auto-generated method stub
 		Statement foodItemQueryStatement;
@@ -54,10 +58,28 @@ public class FoodItem {
 				this.itemName=foodItemQueryResult.getString("name");
 				this.price =foodItemQueryResult.getInt("price");
 				this.calories=foodItemQueryResult.getInt("calories");
+				this.setLowFat(foodItemQueryResult.getBoolean("low_fat"));
+				this.setLowSodium(foodItemQueryResult.getBoolean("low_sodium"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public boolean isLowSodium() {
+		return lowSodium;
+	}
+
+	public void setLowSodium(boolean lowSodium) {
+		this.lowSodium = lowSodium;
+	}
+
+	public boolean isLowFat() {
+		return lowFat;
+	}
+
+	public void setLowFat(boolean lowFat) {
+		this.lowFat = lowFat;
 	}
 }

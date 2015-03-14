@@ -8,18 +8,22 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.csc.Cafe;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
-import com.csc.FoodJointService;
+import com.csc.ObservableObserver.IObservable;
+import com.csc.ObservableObserver.IObserver;
 
-public class User {
+public class User implements IObservable{
 	private int id;
 	private String firstName;
 	private String lastName;
 	private String cardNumber;
 	private int expenses;
 	private int expenses_remaining;
+	ArrayList<IObserver> observers=new ArrayList<IObserver>();
 
 	public User(int id,String firstName,String lastName, String cardNumber){
 		this.id=id;
@@ -29,10 +33,13 @@ public class User {
 	}
 
 	public User(){
-		
 	}
 
-	public User getUserByCardNumber(String cardNumber){
+	public void addObservers(IObserver observer){
+		observers.add(observer);
+	}
+	
+	public User setUserDetailsByCardNumber(String cardNumber){
 		Statement userQueryStatement;
 		try{
 			userQueryStatement = DatabaseConnection.connectionRequest().createStatement();
@@ -76,75 +83,28 @@ public class User {
 		return this.expenses_remaining;
 	}
 	
-	public ArrayList<FoodPurchaseTransaction> getUnpickedOrders(){
-		ArrayList<FoodPurchaseTransaction> unpickedOrders=new ArrayList<FoodPurchaseTransaction>();
-		Statement unpickedOrdersStatement;
-		try {
-			unpickedOrdersStatement = DatabaseConnection.connectionRequest().createStatement();
-			//TODO include condition for date and time of the 
-			String unpickedOrdersQuery="Select * from food_order_transaction where status='Ordered' and card_number='"+this.cardNumber+"'";
-			ResultSet unpickedOrdersQueryResult=unpickedOrdersStatement.executeQuery(unpickedOrdersQuery);
-			while(unpickedOrdersQueryResult.next()){
-				int id=unpickedOrdersQueryResult.getInt("id");
-				ArrayList<FoodItem> unpickedOrderedItems=getOrderItems(id);
-				String cardNumber=unpickedOrdersQueryResult.getString("card_number");
-				FoodJointService foodJoint=new Cafe(unpickedOrdersQueryResult.getInt("food_joint_id"));
-				FoodPurchaseTransaction order=new FoodPurchaseTransaction(id,unpickedOrderedItems,cardNumber,foodJoint);
-				//order.setStatus(unpickedOrdersQueryResult.getString("status"));
-				unpickedOrders.add(order);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return unpickedOrders;
+	public int getExpenses() {
+		return expenses;
 	}
 
-	private ArrayList<FoodItem> getOrderItems(int orderId){
-		ArrayList<FoodItem> foodItem =new ArrayList<FoodItem>();
-		Statement orderFoodItemStatement;
-		try {
-			orderFoodItemStatement= DatabaseConnection.connectionRequest().createStatement();
-			String orderFoodItemQuery="Select * from food_order_transaction_lines where order_id="+orderId;
-			ResultSet orderFoodItemQueryResult=orderFoodItemStatement.executeQuery(orderFoodItemQuery);
-			while(orderFoodItemQueryResult.next()){
-				FoodItem item=new FoodItem(orderFoodItemQueryResult.getInt("item_id"));
-				foodItem.add(item);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return foodItem;
+	public void setExpenses(int expenses){
+		this.expenses=expenses;
 	}
+	
 
-	public boolean pickUpOrder(FoodPurchaseTransaction transaction){
-		transaction.setStatus("Delivered");
-		if(transaction.update()){
-		  return true;	
-		}
-		else{
-			return false;
-		}
-	}
-
-	public void updateExpenses(int expense){
+	public void updateExpenses(){
 		try {
-			this.expenses=this.expenses+expense;
 			Statement updateExpenseStatement=DatabaseConnection.connectionRequest().createStatement();
-			String updateExpenseQuery="update user set expenses="+expense+" where card_number="+this.cardNumber;
+			String updateExpenseQuery="update user set expenses="+this.expenses+" where card_number="+this.cardNumber;
 			updateExpenseStatement.executeUpdate(updateExpenseQuery);
 			updateRemainingExpenses();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
 	public void updateRemainingExpenses(){
-		//TODO change variable name to available balance
 		DateFormat dateFormatForExpenses = new SimpleDateFormat("yyyy-MM");
 		Date dateObj = new Date();
 		int amountSpentForTheCurrentMonth=0;
@@ -167,21 +127,22 @@ public class User {
 			else if(amountSpentForTheCurrentMonth<=CurrentSession.getCurrentUser().getExpenses()){
 				fundsRemaining=CurrentSession.getCurrentUser().getExpenses()-amountSpentForTheCurrentMonth;
 			}
-
 			String query="update user set expenses_remaining="+fundsRemaining+" where card_number='"+this.cardNumber+"'";
 			this.expenses_remaining=fundsRemaining;
 			updateProfileStatement.executeUpdate(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public int getExpenses() {
-		return expenses;
+	@Override
+	public void notifyObserver() {
+		// TODO Auto-generated method stub
+		if(observers.size()>0){
+			for(int i=0;i<observers.size();i++){
+				observers.get(i).updateComponents();
+			}
+		}
 	}
 
-	public void setExpenses(int expenses){
-		this.expenses=expenses;
-	}
 }

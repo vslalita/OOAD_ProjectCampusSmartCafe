@@ -1,6 +1,5 @@
 package com.csc.model;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,58 +8,53 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import com.csc.Cafe;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
-import com.csc.FoodJointService;
 
 public class FoodPurchaseTransaction {
 
 	private int id;
 	private ArrayList<FoodItem> foodItems=new ArrayList<FoodItem>();
 	private String status;
-	private FoodJointService foodJoint;
+	private FoodJoint foodJoint;
 	private String cardNumber;
-	private Date date;
 
-	public FoodPurchaseTransaction(int id,ArrayList<FoodItem> foodItems,String cardNumber,FoodJointService foodJoint){
+	public FoodPurchaseTransaction(int id,ArrayList<FoodItem> foodItems,String cardNumber,FoodJoint foodJoint){
 		this.id=id;
 		this.foodItems=foodItems;
 		this.cardNumber=cardNumber;
 		this.foodJoint=foodJoint;
 	}
 	
-	public FoodPurchaseTransaction(ArrayList<FoodItem> foodItems,String cardNumber,FoodJointService foodJoint){
+	public FoodPurchaseTransaction(ArrayList<FoodItem> foodItems,String cardNumber,FoodJoint foodJoint){
 		this.foodItems=foodItems;
 		this.cardNumber=cardNumber;
 		this.foodJoint=foodJoint;
 	}
 	
-	public FoodPurchaseTransaction(int id){
-		this.id=id;
-		getOrderDetails(id);
+	public FoodPurchaseTransaction(){
+		
 	}
-
-	private void getOrderDetails(int id2) {
-		// TODO Auto-generated method stub
+	
+	public void setOrderDetails(int orderId) {
+		this.id=orderId;
 		try {
 			Statement orderQueryStatement=DatabaseConnection.connectionRequest().createStatement();
-			String orderItemsQuery="Select * from food_order_transaction_lines where order_id="+id;
+			String orderItemsQuery="Select * from food_order_transaction_lines where order_id="+orderId;
 			ResultSet orderItemsQueryResult=orderQueryStatement.executeQuery(orderItemsQuery);
 			while(orderItemsQueryResult.next()){
 				FoodItem item=new FoodItem(orderItemsQueryResult.getInt("id"));
 				this.foodItems.add(item);
 			}
-			String orderQuery="Select * from food_order_transaction where id="+id;
+			String orderQuery="Select * from food_order_transaction where id="+orderId;
 			ResultSet orderQueryResult=orderQueryStatement.executeQuery(orderQuery);
 			while(orderQueryResult.next()){
 				this.status=orderQueryResult.getString("status");
 				this.cardNumber=orderQueryResult.getString("card_number");
-				//TODO create nly cafe object.Check with this.
-				this.foodJoint=new Cafe(orderQueryResult.getInt("food_joint_id"));
+				this.foodJoint=new FoodJoint();
+				this.foodJoint.setFoodJointDetailsById(orderQueryResult.getInt("food_joint_id"));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -70,20 +64,23 @@ public class FoodPurchaseTransaction {
 		this.status=status;
 	}
 
-	public void setFoodJoint(FoodJointService foodJoint){
+	public void setFoodJoint(FoodJoint foodJoint){
 		this.foodJoint=foodJoint;
 	}
 	
 	public int getId(){
 		return this.id;
 	}
+	
+	public String getCardNumber(){
+		return this.cardNumber;
+	}
 
-	public FoodJointService getFoodJoint(){
+	public FoodJoint getFoodJoint(){
 		return this.foodJoint;
 	}
 	
 	public void createTransaction(){
-		//TODO write functionality to insert data into table
 		try {
 			Statement orderInsertionStatement=DatabaseConnection.connectionRequest().createStatement();
 			int price=0;
@@ -108,17 +105,12 @@ public class FoodPurchaseTransaction {
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void deleteTransaction(){
-		//TODO delete ordered items and transaction
-	}
 
 	public boolean update(){
-		//TODO write query to update the order.
 		try {
 			Statement updateOrderQueryStatement=DatabaseConnection.connectionRequest().createStatement();
 			String updateOrderQuery="update food_order_transaction set status='"+this.status+"' where id="+this.id;
@@ -127,7 +119,6 @@ public class FoodPurchaseTransaction {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
       return false;
