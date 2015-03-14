@@ -144,6 +144,7 @@ public class User {
 	}
 
 	public void updateRemainingExpenses(){
+		//TODO change variable name to available balance
 		DateFormat dateFormatForExpenses = new SimpleDateFormat("yyyy-MM");
 		Date dateObj = new Date();
 		int amountSpentForTheCurrentMonth=0;

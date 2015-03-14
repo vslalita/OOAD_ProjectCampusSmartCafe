@@ -12,7 +12,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
 
-public class Profile {
+public class ProfileService {
 	//TODO add it in user class
 	public PieDataset getDietaryStatistics(){
 		DateFormat dateFormatForCalories = new SimpleDateFormat("yyyy-MM-dd");
@@ -69,8 +69,9 @@ public class Profile {
 		return dataset;
 	}
 	
+	//TODO remove main
 	public static void main(String[] args){
-		Profile p=new Profile();
+		ProfileService p=new ProfileService();
 		p.getDietaryStatistics();
 	}
 

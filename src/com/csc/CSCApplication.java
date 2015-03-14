@@ -19,12 +19,14 @@ public class CSCApplication {
 				String location=foodJointQueryResult.getString("location_address");
 				int xPosition=foodJointQueryResult.getInt("x_position");
 				int yPosition=foodJointQueryResult.getInt("y_position");
+				boolean isVendingMachine=foodJointQueryResult.getBoolean("is_vending_machine");
+				boolean isCafe=foodJointQueryResult.getBoolean("is_cafe");
 				if(foodJointQueryResult.getBoolean("is_vending_machine")){
-					foodJoint=new VendingMachineService(id,location,xPosition,yPosition);
+					foodJoint=new VendingMachineService(id,location,xPosition,yPosition,isVendingMachine,isCafe);
 					foodJoints.add(foodJoint);
 				}
 				if(foodJointQueryResult.getBoolean("is_cafe")){
-					foodJoint=new Cafe(id,location,xPosition,yPosition);
+					foodJoint=new Cafe(id,location,xPosition,yPosition,isVendingMachine,isCafe);
 					foodJoints.add(foodJoint);
 				}
 			}

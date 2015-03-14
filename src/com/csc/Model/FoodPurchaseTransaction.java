@@ -57,7 +57,7 @@ public class FoodPurchaseTransaction {
 				this.status=orderQueryResult.getString("status");
 				this.cardNumber=orderQueryResult.getString("card_number");
 				//TODO create nly cafe object.Check with this.
-				this.foodJoint=new FoodJoint(orderQueryResult.getInt("food_joint_id"));
+				this.foodJoint=new Cafe(orderQueryResult.getInt("food_joint_id"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

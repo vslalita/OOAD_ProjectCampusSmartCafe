@@ -15,6 +15,14 @@ public class VendingMachineService extends FoodJointService {
 	}
 	
 	
+	public VendingMachineService(int id, String location, int xPosition,
+			int yPosition,boolean isCafe,boolean isVendingMachine) {
+		// TODO Auto-generated constructor stub
+		super(id, location, xPosition,
+			yPosition,isCafe,isVendingMachine);
+	}
+
+
 	@Override
 	protected void createTransaction(ArrayList<FoodItem> foodItems) {
 		// TODO create a transaction. Implementation involves immediate delivery of the item.

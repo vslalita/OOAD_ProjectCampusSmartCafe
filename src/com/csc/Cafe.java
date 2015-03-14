@@ -10,7 +10,15 @@ import com.csc.model.FoodPurchaseTransaction;
 
 public class Cafe extends FoodJointService {
 
+	public Cafe(int id,String location,int xPosition,int yPosition,boolean isCafe,boolean isVendingMachine) {
+		super(id, location,xPosition,yPosition,isCafe,isVendingMachine);
+		// TODO Auto-generated constructor stub
+	}
 	
+	public Cafe(int id){
+		super(id);
+	}
+
 	@Override
 	protected void createTransaction(ArrayList<FoodItem> foodItems) {
 		// TODO creates the transaction by setting status and the pickup location.

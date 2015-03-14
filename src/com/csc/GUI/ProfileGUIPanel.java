@@ -27,7 +27,7 @@ import org.jfree.data.general.PieDataset;
 import org.jfree.util.Rotation;
 import org.jfree.*;
 
-import com.csc.Profile;
+import com.csc.ProfileService;
 
 /**
  *
@@ -43,12 +43,12 @@ public class ProfileGUIPanel extends javax.swing.JPanel {
 	}
 
 	private  PieDataset createDatasetForDietaryProfile() {
-		Profile p=new Profile();
+		ProfileService p=new ProfileService();
 		return p.getDietaryStatistics();
 	}
 	
 	private  CategoryDataset createDatasetForExpenseProfile() {
-		Profile p=new Profile();
+		ProfileService p=new ProfileService();
 		return p.getExpensesStatics();
 	}
 

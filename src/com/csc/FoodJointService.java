@@ -13,13 +13,77 @@ import com.csc.model.FoodPreference;
 import com.csc.model.FoodPurchaseTransaction;
 
 abstract public class FoodJointService {
+    private int id;
+    //TODO include property name
+	protected String location;
+	private int xPosition;
+	private int yposition;
+	private boolean isCafe;
+	private boolean isVendingMachine;
+    
+    public FoodJointService(int id,String location,int xPosition,int yPosition,boolean isCafe,boolean isVendingMachine){
+    	this.id=id;
+    	this.location=location;
+    	this.xPosition=xPosition;
+    	this.yposition=yPosition;
+    	this.isCafe=isCafe;
+    	this.isVendingMachine=isVendingMachine;
+    }
     
     public FoodJointService(){
     	
     }
     
+    public FoodJointService(int id){
+    	//remove this constructor
+    	this.id=id;
+    	this.getLocation(id);
+    	
+    }
+    
+    public int getId(){
+    	return this.id;
+    }
+    
+    public boolean getIsVendingMachine(){
+    	return this.isVendingMachine;
+    }
     
     
+    public boolean getIsCafe(){
+    	return this.isCafe;
+    }
+    
+    public int getXPostion(){
+    	return this.xPosition;
+    }
+    
+    public int getYPostion(){
+    	return this.yposition;
+    }
+    
+    
+    private void getLocation(int id) {
+		// TODO Auto-generated method stub
+    	Statement foodJointsStatement;
+		try {
+			foodJointsStatement = DatabaseConnection.connectionRequest().createStatement();
+			String foodJointsQuery="Select * from food_joint where id="+id;
+			ResultSet foodJointsQueryResult=foodJointsStatement.executeQuery(foodJointsQuery);
+			while(foodJointsQueryResult.next()){
+				this.location=foodJointsQueryResult.getString("location_address");
+				this.xPosition=foodJointsQueryResult.getInt("x_position");
+				this.yposition=foodJointsQueryResult.getInt("y_position");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String getLocation(){
+    	return this.location;
+    }
 	
 	protected abstract void createTransaction(ArrayList<FoodItem> foodItems);
 	
