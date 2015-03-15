@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.csc.GUI;
+package com.csc.views;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -25,7 +25,7 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.util.Rotation;
 
-import com.csc.ProfileService;
+import com.csc.service.ProfileService;
 
 /**
  *

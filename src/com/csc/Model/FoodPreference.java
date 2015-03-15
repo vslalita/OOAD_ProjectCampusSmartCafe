@@ -7,61 +7,66 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
 
 public class FoodPreference {
 	private String cardNumber;
 	private int calories;
-	private boolean low_sodium;
-	private boolean low_fat;
+	private boolean lowSodium;
+	private boolean lowFat;
 
-	public FoodPreference(String cardnumber,int calories,boolean low_sodium,boolean low_fat){
+	public FoodPreference(String cardnumber,int calories,boolean lowSodium,boolean lowFat){
 		this.calories=calories;
 		this.cardNumber=cardnumber;
-		this.low_sodium=low_sodium;
-		this.low_fat=low_fat;
+		this.lowSodium=lowSodium;
+		this.lowFat=lowFat;
 	}
 
 	public FoodPreference() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public boolean isLowFat(){
-		return this.low_fat;
-	}
 	
-	public boolean isLowSodium(){
-		return this.low_sodium;
-	}
 	
-	public int getCalories(){
-		return this.calories;
-	}
-	
-	public void setPrefDeatilsByCardNumber(String cardNumber){
-		this.cardNumber=cardNumber;
-		this.calories=fetchUserCalories();
-		Statement preferenceStatement;
-		try {
-			preferenceStatement = DatabaseConnection.connectionRequest().createStatement();
-			String preferenceQuery="Select * from food_preferences where card_number='"+this.cardNumber+"'";
-			ResultSet preferenceQueryResult=preferenceStatement.executeQuery(preferenceQuery);
-			while(preferenceQueryResult.next()){
-				this.low_fat=preferenceQueryResult.getBoolean("low_fat");
-				this.low_sodium=preferenceQueryResult.getBoolean("low_sodium");
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
+
+	public String getCardNumber() {
+		return cardNumber;
 	}
 
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
+	public int getCalories() {
+		return calories;
+	}
+
+	public void setCalories(int calories) {
+		this.calories = calories;
+	}
+
+	public boolean isLowSodium() {
+		return lowSodium;
+	}
+
+	public void setLowSodium(boolean lowSodium) {
+		this.lowSodium = lowSodium;
+	}
+
+	public boolean isLowFat() {
+		return lowFat;
+	}
+
+	public void setLowFat(boolean lowFat) {
+		this.lowFat = lowFat;
+	}
 
 	public void save(int caloriesToBeModified,String action,boolean low_sodium,boolean low_fat){
-		this.low_fat=low_fat;
-		this.low_sodium=low_sodium;
+		this.lowFat=low_fat;
+		this.lowSodium=low_sodium;
 		try {
 			Statement preferenceStatement=DatabaseConnection.connectionRequest().createStatement();
 			String preferenceQuery="Select count(*) from food_preferences where card_number='"+this.cardNumber+"'";
@@ -80,17 +85,19 @@ public class FoodPreference {
 					preferenceStatement.executeUpdate(query);
 				}
 				else{
-					String query="insert into food_preferences(card_number,calories,calories_remaining,low_fat,low_sodium) values("+this.cardNumber+","+this.calories+","+this.calories+","+this.low_fat+","+this.low_sodium+")";
+					String query="insert into food_preferences(card_number,calories,calories_remaining,low_fat,low_sodium) values("+this.cardNumber+","+this.calories+","+this.calories+","+this.lowFat+","+this.lowSodium+")";
 					preferenceStatement.executeUpdate(query);
 				}
 			}
 			updateRemainingCalories();
+			User currentUser = CurrentSession.getInstance().getCurrentUser();
+			currentUser.setFoodPreference(this);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+   
 	public void updateRemainingCalories(){
 		DateFormat dateFormatForCalories = new SimpleDateFormat("yyyy-MM-dd");
 		Date dateObj = new Date();
@@ -116,8 +123,9 @@ public class FoodPreference {
 			else if(caloriesSpent<=userDailyIntakeCalories){
 				caloriesRemaining=userDailyIntakeCalories-caloriesSpent;
 			}
-			String query="update food_preferences set calories_remaining="+caloriesRemaining+" where card_number='"+CurrentSession.getCurrentUser().getCardNumber()+"'";
+			String query="update food_preferences set calories_remaining="+caloriesRemaining+" where card_number='"+this.cardNumber+"'";
 			updateProfileStatement.executeUpdate(query);
+			
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -126,27 +134,12 @@ public class FoodPreference {
 
 	}
 
-	public int fetchUserCalories(){
-		int dailyIntakeCalories=0;
-		try {
-			Statement getCaloriesStatement=DatabaseConnection.connectionRequest().createStatement();
-			String getCaloriesQuery="Select calories from food_preferences where card_number='"+CurrentSession.getCurrentUser().getCardNumber()+"'";
-			ResultSet getCaloriesResult=getCaloriesStatement.executeQuery(getCaloriesQuery);
-			while(getCaloriesResult.next()){
-				dailyIntakeCalories=getCaloriesResult.getInt("calories");
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return dailyIntakeCalories;
-	}
-
+	
 	public int getRemainingCalories(){
 		int remainingCalories=0;
 		try {
 			Statement getRemainingCaloriesStatement=DatabaseConnection.connectionRequest().createStatement();
-			String getRemainingCaloriesQuery="Select calories_remaining from food_preferences where card_number='"+CurrentSession.getCurrentUser().getCardNumber()+"'";
+			String getRemainingCaloriesQuery="Select calories_remaining from food_preferences where card_number='"+this.cardNumber+"'";
 			ResultSet getRemainingCaloriesResult=getRemainingCaloriesStatement.executeQuery(getRemainingCaloriesQuery);
 			while(getRemainingCaloriesResult.next()){
 				remainingCalories=getRemainingCaloriesResult.getInt("calories_remaining");

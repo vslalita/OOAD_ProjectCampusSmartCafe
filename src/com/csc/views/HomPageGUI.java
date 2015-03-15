@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.csc.GUI;
+package com.csc.views;
 
 import com.csc.*;
 import com.csc.ObservableObserver.IObserver;
 import com.csc.model.FoodItem;
 import com.csc.model.FoodPreference;
+import com.csc.service.CafeService;
+import com.csc.service.FoodJointService;
+import com.csc.service.VendingMachineService;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -102,7 +105,7 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 
-		jLabel1.setText("Hello "+CurrentSession.getCurrentUser().getFirstName());
+		jLabel1.setText("Hello "+CurrentSession.getInstance().getCurrentUser().getFirstName());
 		
         jLabel1.addMouseListener(new MouseListener(){
 
@@ -172,18 +175,17 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 				// TODO Auto-generated method stub
 				if(items!=null&&items.size()>0){
 					FoodJointService foodJointValidation;
-					if(CurrentSession.getMachine().getIsVendingMachine()){
+					if(CurrentSession.getInstance().getCurrentFoodJoint().isVendingMachine()){
 						 foodJointValidation=new VendingMachineService();
 					}
 					else{
 						foodJointValidation=new CafeService();
 					}
 					
-					if(foodJointValidation.validateAndCreateTransaction(items)){
-						FoodPreference fp=new FoodPreference();
-						fp.setPrefDeatilsByCardNumber(CurrentSession.getCurrentUser().getCardNumber());
+					if(foodJointValidation.validateAndCreateOrder(items)){
+						FoodPreference fp=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
 						jLabel6.setText("Daily Calories Remaining: "+fp.getRemainingCalories());
-						jLabel7.setText("Funds remaining for this Month: "+CurrentSession.getCurrentUser().getRemainingExpenses()+"  ");
+						jLabel7.setText("Funds remaining for this Month: "+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+"  ");
 						JOptionPane.showMessageDialog(jPanel3,
 								"Order Confirmed");
 						jButton6.doClick();
@@ -200,12 +202,11 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 		});
 
 		
-		FoodPreference fp=new FoodPreference();
-		fp.setPrefDeatilsByCardNumber(CurrentSession.getCurrentUser().getCardNumber());
-		CurrentSession.getCurrentUser().updateRemainingExpenses();
+		FoodPreference fp=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
+		CurrentSession.getInstance().getCurrentUser().updateRemainingExpenses();
 		fp.updateRemainingCalories();
 		jLabel6.setText("Daily Calories Remaining: "+fp.getRemainingCalories());
-		jLabel7.setText("Funds remaining for this Month: "+CurrentSession.getCurrentUser().getRemainingExpenses()+"  ");
+		jLabel7.setText("Funds remaining for this Month: "+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+"  ");
 
 		jButton3.setText("<html><center>View<br>Profile</center></html>");
 		jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -507,7 +508,7 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 	private void populateItems() {
 		// TODO remove instance and take from session
 		ArrayList<FoodItem> items;
-		if(CurrentSession.getMachine().getIsVendingMachine()){
+		if(CurrentSession.getInstance().getCurrentFoodJoint().isVendingMachine()){
 			items=new VendingMachineService().displayItems();
 		}
 		else{
@@ -602,6 +603,5 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 	@Override
 	public void updateComponents() {
 		// TODO Auto-generated method stub
-		
 	}
 }

@@ -1,4 +1,4 @@
-package com.csc.GUI;
+package com.csc.views;
 /**
  * author: Akhila Janapareddy
  * 
@@ -17,7 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.csc.CSCApplication;
+import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.model.FoodJoint;
 
@@ -36,20 +36,20 @@ public class MapJFrame extends JFrame{
 	public void start(){
 		final ImagePanel panel = new ImagePanel(new ImageIcon("/Users/twinklesiva05/Desktop/mapImage.png").getImage());
 		
-		CSCApplication app=new CSCApplication();
+		CSCApplicationContext app=new CSCApplicationContext();
 		ArrayList<FoodJoint> foodJoints=app.getAllFoodJoints();
 		JButton machineButton;
 		for(int i=0;i<foodJoints.size();i++){
 			final FoodJoint foodJoint=foodJoints.get(i);
-			if(foodJoint.getIsCafe()){
+			if(foodJoint.isCafe()){
 				Icon vendingMachineIcon = new ImageIcon("/Users/twinklesiva05/Desktop/icon_food.jpg");
 				machineButton = new JButton(vendingMachineIcon);
 				machineButton.setRolloverIcon(vendingMachineIcon);
-				machineButton.setBounds(foodJoint.getXPostion(), foodJoint.getYPostion(), 25, 25);
+				machineButton.setBounds(foodJoint.getXPosition(), foodJoint.getYPosition(), 25, 25);
 				final JLabel machineDetailsLabel=new JLabel(foodJoint.getName());
 				final JLabel machineLocationLabel=new JLabel("Location:"+foodJoint.getLocation());
-				machineDetailsLabel.setBounds(foodJoint.getXPostion()+20,foodJoint.getYPostion()-30,250,20);
-				machineLocationLabel.setBounds(foodJoint.getXPostion()+20,foodJoint.getYPostion()-15,250,20);
+				machineDetailsLabel.setBounds(foodJoint.getXPosition()+20,foodJoint.getXPosition()-30,250,20);
+				machineLocationLabel.setBounds(foodJoint.getXPosition()+20,foodJoint.getXPosition()-15,250,20);
 				machineButton.addMouseListener(new MouseListener(){
 
 					@Override
@@ -96,8 +96,7 @@ public class MapJFrame extends JFrame{
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						// TODO Auto-generated method stub
-						CurrentSession.setMachine(foodJoint);
+						CSCApplicationContext.getFoodJointController().selectFoodJoint(foodJoint);						
 						System.out.println("Created Cafe");
 						LoginCafe openLoginFrame=new LoginCafe();
 						openLoginFrame.setVisible(true);
@@ -108,15 +107,15 @@ public class MapJFrame extends JFrame{
 				panel.add(machineButton);
 				
 			}
-			if(foodJoint.getIsVendingMachine()){
+			if(foodJoint.isVendingMachine()){
 				Icon vendingMachineIcon = new ImageIcon("/Users/twinklesiva05/Desktop/vending_icon.gif");
 				machineButton = new JButton(vendingMachineIcon);
 				machineButton.setRolloverIcon(vendingMachineIcon);
-				machineButton.setBounds(foodJoint.getXPostion(), foodJoint.getYPostion(), 25, 25);
+				machineButton.setBounds(foodJoint.getXPosition(), foodJoint.getXPosition(), 25, 25);
 				final JLabel machineDetailsLabel=new JLabel(" "+foodJoint.getName());
 				final JLabel machineLocationLabel=new JLabel(" Location:"+foodJoint.getLocation());
-				machineDetailsLabel.setBounds(foodJoint.getXPostion()+20,foodJoint.getYPostion()-30,250,20);
-				machineLocationLabel.setBounds(foodJoint.getXPostion()+20,foodJoint.getYPostion()-15,250,20);
+				machineDetailsLabel.setBounds(foodJoint.getXPosition()+20,foodJoint.getXPosition()-30,250,20);
+				machineLocationLabel.setBounds(foodJoint.getXPosition()+20,foodJoint.getXPosition()-15,250,20);
 				machineButton.addMouseListener(new MouseListener(){
 
 
@@ -157,7 +156,7 @@ public class MapJFrame extends JFrame{
 					public void mouseReleased(MouseEvent arg0) {
 						// TODO Auto-generated method stub
 
-					}
+					};
 
 				});
 				
@@ -166,7 +165,7 @@ public class MapJFrame extends JFrame{
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// TODO Auto-generated method stub
-						CurrentSession.setMachine(foodJoint);
+						CSCApplicationContext.getFoodJointController().selectFoodJoint(foodJoint);
 						JFrame openLoginFrame=new LoginVendingMachinePanel();
 						openLoginFrame.setVisible(true);
 					}

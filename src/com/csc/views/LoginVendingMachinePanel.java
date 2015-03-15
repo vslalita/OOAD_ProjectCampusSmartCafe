@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.csc.GUI;
+package com.csc.views;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 
 /**
@@ -54,10 +55,10 @@ public class LoginVendingMachinePanel extends javax.swing.JFrame {
             	jButton2.setText("Login");
                 jButton2.addActionListener(new java.awt.event.ActionListener() {
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    	String pcode = jTextField2.getText();
-        				if(pcode.matches("[0-9]+") && pcode.length()==5) {
-        					 CurrentSession.getMemberInstance(pcode); // create the user for this session.
-        					 if(CurrentSession.getCurrentUser()!=null){
+                    	String cardNumber = jTextField2.getText();
+        				if(cardNumber.matches("[0-9]+") && cardNumber.length()==5) {
+        					 // create the user for this session.
+        					 if(CSCApplicationContext.getUserController().login(cardNumber)){
         						 JFrame homeFrame =new HomPageGUI();
         						 homeFrame.setVisible(true);
         						 dispose();

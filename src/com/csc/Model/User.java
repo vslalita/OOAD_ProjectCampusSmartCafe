@@ -21,6 +21,7 @@ public class User implements IObservable{
 	private String firstName;
 	private String lastName;
 	private String cardNumber;
+	private FoodPreference foodPreference;
 	private int expenses;
 	private int expenses_remaining;
 	ArrayList<IObserver> observers=new ArrayList<IObserver>();
@@ -38,29 +39,9 @@ public class User implements IObservable{
 	public void addObservers(IObserver observer){
 		observers.add(observer);
 	}
-	
-	public User setUserDetailsByCardNumber(String cardNumber){
-		Statement userQueryStatement;
-		try{
-			userQueryStatement = DatabaseConnection.connectionRequest().createStatement();
-			String userQuery="Select * from user where card_number='"+cardNumber+"'";
-			ResultSet userQueryResult=userQueryStatement.executeQuery(userQuery);
-			while(userQueryResult.next()){
-				if(cardNumber.equals(userQueryResult.getString("card_number"))){
-					this.id=userQueryResult.getInt("id");
-					this.firstName=userQueryResult.getString("first_name");
-					this.lastName=userQueryResult.getString("last_name");
-					this.cardNumber=cardNumber;
-					int expenses=userQueryResult.getInt("expenses");
-					setExpenses(expenses);
-				}
-			} 
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return this;
-	}
 
+
+	//Getters
 	public int getId(){
 		return this.id;
 	}
@@ -86,10 +67,40 @@ public class User implements IObservable{
 	public int getExpenses() {
 		return expenses;
 	}
+	
+	public FoodPreference getFoodPreference() {
+		return foodPreference;
+	}
 
+
+	
+	//Setters
 	public void setExpenses(int expenses){
 		this.expenses=expenses;
 	}
+	
+	public void setId(int id) {
+		this.id=id;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName=firstName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName=lastName;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber=cardNumber;
+	}
+	
+	public void setFoodPreference(FoodPreference foodPreference) {
+		this.foodPreference = foodPreference;
+	}
+
+	
+
 	
 
 	public void updateExpenses(){
@@ -122,10 +133,10 @@ public class User implements IObservable{
 
 			int fundsRemaining=0;
 			if(amountSpentForTheCurrentMonth==0){
-				fundsRemaining=CurrentSession.getCurrentUser().getExpenses();
+				fundsRemaining=this.getExpenses();
 			}
-			else if(amountSpentForTheCurrentMonth<=CurrentSession.getCurrentUser().getExpenses()){
-				fundsRemaining=CurrentSession.getCurrentUser().getExpenses()-amountSpentForTheCurrentMonth;
+			else if(amountSpentForTheCurrentMonth<=this.getExpenses()){
+				fundsRemaining=this.getExpenses()-amountSpentForTheCurrentMonth;
 			}
 			String query="update user set expenses_remaining="+fundsRemaining+" where card_number='"+this.cardNumber+"'";
 			this.expenses_remaining=fundsRemaining;
@@ -145,4 +156,5 @@ public class User implements IObservable{
 		}
 	}
 
+	
 }

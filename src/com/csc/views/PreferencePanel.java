@@ -1,4 +1,4 @@
-package com.csc.GUI;
+package com.csc.views;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.model.FoodPreference;
 
@@ -98,8 +99,7 @@ public class PreferencePanel extends javax.swing.JPanel {
                         try{
                         	
                             int calories=Integer.parseInt(jTextField1.getText());
-                            FoodPreference preference=new FoodPreference();
-                            preference.setPrefDeatilsByCardNumber(CurrentSession.getCurrentUser().getCardNumber());
+    						FoodPreference preference=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
                             if(calories<preference.getRemainingCalories()){
                             	preference.save(calories,"reduce",isLowSodium,isLowFat);
                                 jLabel.setText("Remaining Calories:"+preference.getRemainingCalories());
@@ -118,10 +118,8 @@ public class PreferencePanel extends javax.swing.JPanel {
                     else if(jRadioButton1.isSelected()){
                         try{
                             int calories=Integer.parseInt(jTextField1.getText());
-                            FoodPreference preference=new FoodPreference();
-                            preference.setPrefDeatilsByCardNumber(CurrentSession.getCurrentUser().getCardNumber());
-                            preference.save(calories,"add",isLowSodium,isLowFat);
-                            jLabel.setText("Remaining Calories:"+preference.getRemainingCalories());
+    					    CSCApplicationContext.getUserController().updateFoodPreference(calories,"add",isLowSodium,isLowFat);
+                            jLabel.setText("Remaining Calories:"+CurrentSession.getInstance().getCurrentUser().getFoodPreference().getRemainingCalories());
                         }catch(Exception NumberFormatException){
                             JOptionPane.showMessageDialog(null,"Enter a valid number");
                             jTextField1.setText("");

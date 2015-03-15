@@ -1,4 +1,4 @@
-package com.csc.GUI;
+package com.csc.views;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

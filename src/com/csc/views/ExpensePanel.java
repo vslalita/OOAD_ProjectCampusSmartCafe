@@ -1,4 +1,4 @@
-package com.csc.GUI;
+package com.csc.views;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,8 +6,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
-import com.csc.UserService;
+import com.csc.service.UserService;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -81,9 +82,9 @@ public class ExpensePanel extends javax.swing.JPanel {
 						try{
 							int expenses=Integer.parseInt(jTextField1.getText());
 							
-							if(expenses<CurrentSession.getCurrentUser().getRemainingExpenses()){
+							if(expenses<CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()){
 								updateService.updateExpenses(expenses,"reduce");
-								jLabel.setText("Funds Remaining for this Month:"+CurrentSession.getCurrentUser().getRemainingExpenses()+" ");
+								jLabel.setText("Funds Remaining for this Month:"+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+" ");
 							}
 							else{
 								JOptionPane.showMessageDialog(null,"Enter a number less than remaning funds");
@@ -100,7 +101,7 @@ public class ExpensePanel extends javax.swing.JPanel {
 						try{
 							int expenses=Integer.parseInt(jTextField1.getText());
 							updateService.updateExpenses(expenses,"add");
-							jLabel.setText("Funds Remaining for this Month:"+CurrentSession.getCurrentUser().getRemainingExpenses()+" ");
+							jLabel.setText("Funds Remaining for this Month:"+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+" ");
 						}catch(Exception NumberFormatException){
 							JOptionPane.showMessageDialog(null,"Enter a valid number");
 							jTextField1.setText("");

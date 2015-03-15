@@ -1,5 +1,6 @@
-package com.csc.GUI;
+package com.csc.views;
 
+import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.model.FoodPreference;
 import com.csc.model.User;
@@ -99,14 +100,13 @@ public class UserInfoPanel extends javax.swing.JPanel {
     
     private void updateUserDetails() {
 		// TODO Auto-generated method stub
-    	User user=CurrentSession.getCurrentUser();
+    	User user=CurrentSession.getInstance().getCurrentUser();
     	jLabel1.setText("Name:");
         jLabel2.setText(user.getFirstName()+" "+user.getLastName());
         jLabel3.setText("Card Number:");
         jLabel4.setText(user.getCardNumber());
         jLabel5.setText("Daily Calorie Intake");
-        FoodPreference fp=new FoodPreference();
-        fp.setPrefDeatilsByCardNumber(user.getCardNumber());
+		FoodPreference fp=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
         jLabel6.setText(""+fp.getCalories());
         jLabel7.setText("Monthly Expenses");
         jLabel8.setText(""+user.getExpenses());

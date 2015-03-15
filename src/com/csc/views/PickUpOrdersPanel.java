@@ -1,4 +1,4 @@
-package com.csc.GUI;
+package com.csc.views;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,8 +10,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-import com.csc.UserService;
 import com.csc.model.FoodPurchaseTransaction;
+import com.csc.service.UserService;
 
 /**
  *

@@ -4,49 +4,40 @@ import com.csc.model.FoodJoint;
 import com.csc.model.User;
 
 public class CurrentSession {
-	//currentUser holds the information of the member who is currently logged in
-	private static  User currentUser;
-	private static FoodJoint currentMachine;
-	private static CurrentSession currentSession=null;
-	private CurrentSession(User user){
-		currentUser=user;
+	
+	private static CurrentSession instance;
+	//currentUser-Holds the information of the member who is currently logged in
+	private User currentUser;
+	//TODO Why is this called currentMachine. Is cafe same as machine?
+	private FoodJoint currentFoodJoint;
+	
+	private CurrentSession(){
+		this.currentFoodJoint=null;
+		this.currentUser=null;
+	}
+    
+	public synchronized static CurrentSession getInstance(){
+		if (instance ==null) {
+			 instance=new CurrentSession();
+		}
+		return instance;
+	}
+	public void reset(){
+		instance=null;
 	}
 
-	public static CurrentSession getMemberInstance(String cardNumber){
-		User user=null;
-		if(currentSession==null){
-			user=new User();
-			user.setUserDetailsByCardNumber(cardNumber);
-			if(user.getId()>0){
-				currentSession=new CurrentSession(user);
-			}
-			return currentSession;
-		}
-		else{
-			currentUser=user;
-			return currentSession;
-		}
-	}
-
-	public static void setMachine(FoodJoint joint){
-		if(currentMachine==null){
-			currentMachine=joint;
-		}
+	public void setCurrentFoodJoint(FoodJoint joint){
+		this.currentFoodJoint=joint;
 	}
 	
-	public static FoodJoint getMachine(){
-		return currentMachine;
+	public FoodJoint getCurrentFoodJoint(){
+		return currentFoodJoint;
 	}
-	
-	public static User getCurrentUser(){
-		if(currentSession!=null && currentUser!=null){
-			return currentUser;
-		}
-		else return null;
+	public void setCurrentUser(User user){
+		this.currentUser=user;
 	}
-
-	public static void resetCurrentMember(){
-		currentUser=null;
-	}
+	public User getCurrentUser(){
+		return this.currentUser;
+	}		
 }
 

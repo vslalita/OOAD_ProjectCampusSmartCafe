@@ -10,6 +10,7 @@ import java.util.Calendar;
 
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
+import com.csc.controller.CSCServiceContext;
 
 public class FoodPurchaseTransaction {
 
@@ -35,7 +36,7 @@ public class FoodPurchaseTransaction {
 	public FoodPurchaseTransaction(){
 		
 	}
-	
+	//TODO Change this to a Service getOrderDetails
 	public void setOrderDetails(int orderId) {
 		this.id=orderId;
 		try {
@@ -51,8 +52,8 @@ public class FoodPurchaseTransaction {
 			while(orderQueryResult.next()){
 				this.status=orderQueryResult.getString("status");
 				this.cardNumber=orderQueryResult.getString("card_number");
-				this.foodJoint=new FoodJoint();
-				this.foodJoint.setFoodJointDetailsById(orderQueryResult.getInt("food_joint_id"));
+				//TODO Prioirty High do you really need 
+				this.foodJoint=CSCServiceContext.getFoodJointService().getFoodJointDetailsById(orderQueryResult.getInt("food_joint_id"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -89,7 +90,7 @@ public class FoodPurchaseTransaction {
 			}
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar cal1 = Calendar.getInstance();
-			String orderInsertionQuery="insert into food_order_transaction(food_joint_id,status,card_number,amount,created_on) values ("+CurrentSession.getMachine().getId()+",'"+this.status+"','"+CurrentSession.getCurrentUser().getCardNumber()+"',"+price+",'"+dateFormat.format(cal1.getTime())+"')";
+			String orderInsertionQuery="insert into food_order_transaction(food_joint_id,status,card_number,amount,created_on) values ("+this.foodJoint.getId()+",'"+this.status+"','"+this.cardNumber+"',"+price+",'"+dateFormat.format(cal1.getTime())+"')";
 			int insertionQueryResult=orderInsertionStatement.executeUpdate(orderInsertionQuery,Statement.RETURN_GENERATED_KEYS);
 			if(insertionQueryResult>0){
 				ResultSet rs=orderInsertionStatement.getGeneratedKeys();
