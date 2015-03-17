@@ -25,13 +25,11 @@ public class ExpensePanel extends javax.swing.JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JLabel jLabel;
 	/**
      * Creates new form PreferencesPanel
      */
-    public ExpensePanel(JLabel jLabel) {
+    public ExpensePanel() {
         initComponents();
-        this.jLabel=jLabel;
     }
 
     /**
@@ -84,7 +82,6 @@ public class ExpensePanel extends javax.swing.JPanel {
 							
 							if(expenses<CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()){
 								updateService.updateExpenses(expenses,"reduce");
-								jLabel.setText("Funds Remaining for this Month:"+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+" ");
 							}
 							else{
 								JOptionPane.showMessageDialog(null,"Enter a number less than remaning funds");
@@ -101,7 +98,6 @@ public class ExpensePanel extends javax.swing.JPanel {
 						try{
 							int expenses=Integer.parseInt(jTextField1.getText());
 							updateService.updateExpenses(expenses,"add");
-							jLabel.setText("Funds Remaining for this Month:"+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+" ");
 						}catch(Exception NumberFormatException){
 							JOptionPane.showMessageDialog(null,"Enter a valid number");
 							jTextField1.setText("");

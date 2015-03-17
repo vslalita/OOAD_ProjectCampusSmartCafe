@@ -25,14 +25,17 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.util.Rotation;
 
+import com.csc.CurrentSession;
+import com.csc.ObservableObserver.IObserver;
 import com.csc.service.ProfileService;
 
 /**
  *
  * @author twinklesiva05
  */
-public class ProfileGUIPanel extends javax.swing.JPanel {
-
+public class ProfileGUIPanel extends javax.swing.JPanel implements IObserver {
+     
+	
 	/**
 	 * 
 	 */
@@ -46,12 +49,12 @@ public class ProfileGUIPanel extends javax.swing.JPanel {
 
 	private  PieDataset createDatasetForDietaryProfile() {
 		ProfileService p=new ProfileService();
-		return p.getDietaryStatistics();
+		return p.getDietaryStatistics(CurrentSession.getInstance().getCurrentUser());
 	}
 	
 	private  CategoryDataset createDatasetForExpenseProfile() {
 		ProfileService p=new ProfileService();
-		return p.getExpensesStatics();
+		return p.getExpensesStatics(CurrentSession.getInstance().getCurrentUser());
 	}
 
 	private JFreeChart createChart(PieDataset dataset, String title) {
@@ -142,9 +145,11 @@ private JFreeChart createBarChart(final CategoryDataset dataset) {
 		jPanel1 = new javax.swing.JPanel();
 		jPanel2 = new ChartPanel(createChart(createDatasetForDietaryProfile(), "Dietary"));
 		jPanel3 = new ChartPanel(createBarChart(createDatasetForExpenseProfile()));
+        CurrentSession.getInstance().getCurrentUser().addObservers(this);
+        CurrentSession.getInstance().getCurrentUser().getFoodPreference().addObserver(this);
+
 
 		jButton1.setText("Dietery Profile");
-
 		jButton2.setText("Expense Profile");
 
 		jPanel1.setLayout(new java.awt.CardLayout());
@@ -155,8 +160,6 @@ private JFreeChart createBarChart(final CategoryDataset dataset) {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				// TODO Auto-generated method stub
-				jPanel2 = new ChartPanel(createChart(createDatasetForDietaryProfile(), "Dietary"));
-				jPanel1.add(jPanel2, "dietaryProfile");
 				CardLayout layout=(CardLayout)jPanel1.getLayout();
 				layout.show(jPanel1, "dietaryProfile");
 			}
@@ -168,8 +171,6 @@ private JFreeChart createBarChart(final CategoryDataset dataset) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				jPanel3 = new ChartPanel(createBarChart(createDatasetForExpenseProfile()));
-				jPanel1.add(jPanel3, "expenseProfile");
 				CardLayout layout=(CardLayout)jPanel1.getLayout();
 				layout.show(jPanel1, "expenseProfile");
 			}
@@ -217,4 +218,13 @@ private JFreeChart createBarChart(final CategoryDataset dataset) {
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JPanel jPanel3;
 	// End of variables declaration                   
+	@Override
+	public void updateComponents() {
+		// TODO Auto-generated method stub
+		jPanel2 = new ChartPanel(createChart(createDatasetForDietaryProfile(), "Dietary"));
+		jPanel3 = new ChartPanel(createBarChart(createDatasetForExpenseProfile()));
+		jPanel1.add(jPanel2, "dietaryProfile");
+		jPanel1.add(jPanel3, "expenseProfile");
+		
+	}
 }

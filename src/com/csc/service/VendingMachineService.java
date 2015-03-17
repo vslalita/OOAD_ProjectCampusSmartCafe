@@ -9,6 +9,7 @@ import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
 import com.csc.model.FoodItem;
+import com.csc.model.FoodJoint;
 import com.csc.model.FoodPurchaseTransaction;
 import com.csc.model.User;
 
@@ -19,13 +20,12 @@ public class VendingMachineService extends FoodJointService {
 	}
 	
 	@Override
-	protected void createOrder(ArrayList<FoodItem> foodItems) {
+	protected void createOrder(ArrayList<FoodItem> foodItems,User user,FoodJoint foodJoint) {
 		// TODO create a transaction. Implementation involves immediate delivery of the item.
 		if(foodItems.size()>0){
-			User currentUser=CurrentSession.getInstance().getCurrentUser();
-
+			User currentUser=user;
 			FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,
-					currentUser.getCardNumber(),CurrentSession.getInstance().getCurrentFoodJoint());
+					user.getCardNumber(),foodJoint.getId());
 			transaction.setStatus("Delivered");
 			transaction.createTransaction();
 		}

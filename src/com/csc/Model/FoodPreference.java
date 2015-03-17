@@ -5,17 +5,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
+import com.csc.ObservableObserver.IObservable;
+import com.csc.ObservableObserver.IObserver;
 
-public class FoodPreference {
+public class FoodPreference implements IObservable {
 	private String cardNumber;
 	private int calories;
 	private boolean lowSodium;
 	private boolean lowFat;
+	private ArrayList<IObserver> observers=new ArrayList<IObserver>();
+
 
 	public FoodPreference(String cardnumber,int calories,boolean lowSodium,boolean lowFat){
 		this.calories=calories;
@@ -27,11 +32,7 @@ public class FoodPreference {
 	public FoodPreference() {
 		// TODO Auto-generated constructor stub
 	}
-
 	
-	
-
-
 	public String getCardNumber() {
 		return cardNumber;
 	}
@@ -90,8 +91,6 @@ public class FoodPreference {
 				}
 			}
 			updateRemainingCalories();
-			User currentUser = CurrentSession.getInstance().getCurrentUser();
-			currentUser.setFoodPreference(this);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -125,8 +124,9 @@ public class FoodPreference {
 			}
 			String query="update food_preferences set calories_remaining="+caloriesRemaining+" where card_number='"+this.cardNumber+"'";
 			updateProfileStatement.executeUpdate(query);
-			
-
+			User currentUser = CurrentSession.getInstance().getCurrentUser();
+			currentUser.setFoodPreference(this);
+			notifyObservers();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -149,6 +149,21 @@ public class FoodPreference {
 			e.printStackTrace();
 		}
 		return remainingCalories;
+	}
+
+	
+	public void addObserver(IObserver observer){
+		observers.add(observer);
+	}
+	
+	@Override
+	public void notifyObservers() {
+		// TODO Auto-generated method stub
+		if(observers.size()>0){
+			for(int i=0;i<observers.size();i++){
+				observers.get(i).updateComponents();
+			}
+		}
 	}
 
 }

@@ -28,10 +28,8 @@ public class PreferencePanel extends javax.swing.JPanel {
 	/**
      * Creates new form PreferencesPanel
      */
-	JLabel jLabel;
-    public PreferencePanel(JLabel jLabel) {
+    public PreferencePanel() {
         initComponents();
-        this.jLabel=jLabel;
     }
 
     /**
@@ -52,6 +50,7 @@ public class PreferencePanel extends javax.swing.JPanel {
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
 
+        
         jTextField1.setText("");
 
         jLabel1.setText("Enter Calories:");
@@ -102,7 +101,6 @@ public class PreferencePanel extends javax.swing.JPanel {
     						FoodPreference preference=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
                             if(calories<preference.getRemainingCalories()){
                             	preference.save(calories,"reduce",isLowSodium,isLowFat);
-                                jLabel.setText("Remaining Calories:"+preference.getRemainingCalories());
                             }
                             else{
                             	JOptionPane.showMessageDialog(null,"Enter a number lower than remaining Calories");
@@ -118,8 +116,7 @@ public class PreferencePanel extends javax.swing.JPanel {
                     else if(jRadioButton1.isSelected()){
                         try{
                             int calories=Integer.parseInt(jTextField1.getText());
-    					    CSCApplicationContext.getUserController().updateFoodPreference(calories,"add",isLowSodium,isLowFat);
-                            jLabel.setText("Remaining Calories:"+CurrentSession.getInstance().getCurrentUser().getFoodPreference().getRemainingCalories());
+    					    CSCApplicationContext.getUserController().updateFoodPreference(CSCApplicationContext.getCurrentSession().getCurrentUser(),calories,"add",isLowSodium,isLowFat);
                         }catch(Exception NumberFormatException){
                             JOptionPane.showMessageDialog(null,"Enter a valid number");
                             jTextField1.setText("");

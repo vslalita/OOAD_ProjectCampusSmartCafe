@@ -15,16 +15,17 @@ import org.jfree.data.general.PieDataset;
 import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
+import com.csc.model.User;
 
 public class ProfileService {
 	//TODO add it in user class
-	public PieDataset getDietaryStatistics(){
+	public PieDataset getDietaryStatistics(User user){
 		DateFormat dateFormatForCalories = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal1 = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();
 		cal2.add(Calendar.DATE, -7);
 		DefaultPieDataset result = new DefaultPieDataset();
-		String cardNumber=CurrentSession.getInstance().getCurrentUser().getCardNumber();
+		String cardNumber=user.getCardNumber();
 		try {
 			Statement caloriesPerDayQueryStatement=DatabaseConnection.connectionRequest().createStatement();
 		    String caloriesPerDayQuery="Select sum(fi.calories) calories,fot.created_on "
@@ -49,13 +50,13 @@ public class ProfileService {
 	}
 	
 	
-	public CategoryDataset getExpensesStatics(){
+	public CategoryDataset getExpensesStatics(User user){
 		DateFormat dateFormatForCalories = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar cal1 = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();
 		cal2.add(Calendar.DATE, -30);
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		String cardNumber=CurrentSession.getInstance().getCurrentUser().getCardNumber();
+		String cardNumber=user.getCardNumber();
 		try {
 			Statement expenseRetrievalQueryStatement=DatabaseConnection.connectionRequest().createStatement();
 			String expenseRetrievalQuery="Select sum(amount) amount,created_on "
@@ -75,11 +76,6 @@ public class ProfileService {
 		return dataset;
 	}
 	
-	//TODO remove main
-	public static void main(String[] args){
-		ProfileService p=new ProfileService();
-		p.getDietaryStatistics();
-	}
 
 }
 

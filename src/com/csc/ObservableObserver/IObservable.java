@@ -2,6 +2,6 @@ package com.csc.ObservableObserver;
 
 public interface IObservable {
 
-	public void notifyObserver();
+	public void notifyObservers();
 	
 }

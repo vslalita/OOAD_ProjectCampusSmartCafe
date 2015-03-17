@@ -60,8 +60,7 @@ public class UserService {
 		}	
 		return preference;
 	}
-	public void updateFoodPreference(int calories,String action,boolean lowSodium,boolean lowFat){
-		User user=CurrentSession.getInstance().getCurrentUser();
+	public void updateFoodPreference(User user,int calories,String action,boolean lowSodium,boolean lowFat){
 		FoodPreference foodPreference = user.getFoodPreference();
 		foodPreference.save(calories,action,lowSodium,lowFat);
 	}

@@ -17,20 +17,20 @@ public class FoodPurchaseTransaction {
 	private int id;
 	private ArrayList<FoodItem> foodItems=new ArrayList<FoodItem>();
 	private String status;
-	private FoodJoint foodJoint;
+	private int foodJointId;
 	private String cardNumber;
 
-	public FoodPurchaseTransaction(int id,ArrayList<FoodItem> foodItems,String cardNumber,FoodJoint foodJoint){
+	public FoodPurchaseTransaction(int id,ArrayList<FoodItem> foodItems,String cardNumber,int foodJointId){
 		this.id=id;
 		this.foodItems=foodItems;
 		this.cardNumber=cardNumber;
-		this.foodJoint=foodJoint;
+		this.foodJointId=foodJointId;
 	}
 	
-	public FoodPurchaseTransaction(ArrayList<FoodItem> foodItems,String cardNumber,FoodJoint foodJoint){
+	public FoodPurchaseTransaction(ArrayList<FoodItem> foodItems,String cardNumber,int foodJointId){
 		this.foodItems=foodItems;
 		this.cardNumber=cardNumber;
-		this.foodJoint=foodJoint;
+		this.foodJointId=foodJointId;
 	}
 	
 	public FoodPurchaseTransaction(){
@@ -53,7 +53,7 @@ public class FoodPurchaseTransaction {
 				this.status=orderQueryResult.getString("status");
 				this.cardNumber=orderQueryResult.getString("card_number");
 				//TODO Prioirty High do you really need 
-				this.foodJoint=CSCServiceContext.getFoodJointService().getFoodJointDetailsById(orderQueryResult.getInt("food_joint_id"));
+				this.foodJointId=orderQueryResult.getInt("food_joint_id");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -65,8 +65,8 @@ public class FoodPurchaseTransaction {
 		this.status=status;
 	}
 
-	public void setFoodJoint(FoodJoint foodJoint){
-		this.foodJoint=foodJoint;
+	public void setFoodJoint(int foodJointId){
+		this.foodJointId=foodJointId;
 	}
 	
 	public int getId(){
@@ -77,8 +77,8 @@ public class FoodPurchaseTransaction {
 		return this.cardNumber;
 	}
 
-	public FoodJoint getFoodJoint(){
-		return this.foodJoint;
+	public int getFoodJoint(){
+		return this.foodJointId;
 	}
 	
 	public void createTransaction(){
@@ -90,7 +90,7 @@ public class FoodPurchaseTransaction {
 			}
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar cal1 = Calendar.getInstance();
-			String orderInsertionQuery="insert into food_order_transaction(food_joint_id,status,card_number,amount,created_on) values ("+this.foodJoint.getId()+",'"+this.status+"','"+this.cardNumber+"',"+price+",'"+dateFormat.format(cal1.getTime())+"')";
+			String orderInsertionQuery="insert into food_order_transaction(food_joint_id,status,card_number,amount,created_on) values ("+this.foodJointId+",'"+this.status+"','"+this.cardNumber+"',"+price+",'"+dateFormat.format(cal1.getTime())+"')";
 			int insertionQueryResult=orderInsertionStatement.executeUpdate(orderInsertionQuery,Statement.RETURN_GENERATED_KEYS);
 			if(insertionQueryResult>0){
 				ResultSet rs=orderInsertionStatement.getGeneratedKeys();

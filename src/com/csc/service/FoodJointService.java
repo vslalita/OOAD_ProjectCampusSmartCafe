@@ -50,7 +50,6 @@ abstract public class FoodJointService {
 	
 	private boolean validateOrder(ArrayList<FoodItem> items){
 		//TODO validate against preferences calories and expenses etc
-		this.updateRemainingCaloriesAndExpenses();
 		if(items!=null&&items.size()>0){
 			int calories=0;
 			int amount=0;
@@ -79,13 +78,13 @@ abstract public class FoodJointService {
 		return false;
 	}
 	
-	protected abstract void createOrder(ArrayList<FoodItem> foodItems);
+	protected abstract void createOrder(ArrayList<FoodItem> foodItems,User user,FoodJoint foodJoint);
 
 	//Template pattern
-	public boolean validateAndCreateOrder(ArrayList<FoodItem> foodItems){
+	public boolean validateAndCreateOrder(ArrayList<FoodItem> foodItems,User user,FoodJoint foodJoint){
 		if(this.validateOrder(foodItems)){
-			this.createOrder( foodItems);
-			this.updateRemainingCaloriesAndExpenses();
+			this.createOrder( foodItems,user,foodJoint);
+			this.updateRemainingCaloriesAndExpenses(user);
 			return true;
 		}
 		else{
@@ -93,8 +92,8 @@ abstract public class FoodJointService {
 		}
 	}
 	
-	private void updateRemainingCaloriesAndExpenses(){
-		FoodPreference preferencesForValidation = CurrentSession.getInstance().getCurrentUser().getFoodPreference();
+	private void updateRemainingCaloriesAndExpenses(User user){
+		FoodPreference preferencesForValidation = user.getFoodPreference();
 		preferencesForValidation.updateRemainingCalories();
 		CurrentSession.getInstance().getCurrentUser().updateRemainingExpenses();
 		

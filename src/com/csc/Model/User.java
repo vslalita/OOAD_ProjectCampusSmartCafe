@@ -24,7 +24,7 @@ public class User implements IObservable{
 	private FoodPreference foodPreference;
 	private int expenses;
 	private int expenses_remaining;
-	ArrayList<IObserver> observers=new ArrayList<IObserver>();
+	private ArrayList<IObserver> observers=new ArrayList<IObserver>();
 
 	public User(int id,String firstName,String lastName, String cardNumber){
 		this.id=id;
@@ -60,7 +60,6 @@ public class User implements IObservable{
 
 	
 	public int getRemainingExpenses(){
-		updateRemainingExpenses();
 		return this.expenses_remaining;
 	}
 	
@@ -98,10 +97,6 @@ public class User implements IObservable{
 	public void setFoodPreference(FoodPreference foodPreference) {
 		this.foodPreference = foodPreference;
 	}
-
-	
-
-	
 
 	public void updateExpenses(){
 		try {
@@ -141,13 +136,15 @@ public class User implements IObservable{
 			String query="update user set expenses_remaining="+fundsRemaining+" where card_number='"+this.cardNumber+"'";
 			this.expenses_remaining=fundsRemaining;
 			updateProfileStatement.executeUpdate(query);
+			notifyObservers();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
 	@Override
-	public void notifyObserver() {
+	public void notifyObservers() {
 		// TODO Auto-generated method stub
 		if(observers.size()>0){
 			for(int i=0;i<observers.size();i++){

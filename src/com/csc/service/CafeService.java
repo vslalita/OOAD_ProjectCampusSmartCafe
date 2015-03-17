@@ -11,6 +11,7 @@ import com.csc.DatabaseConnection;
 import com.csc.model.FoodItem;
 import com.csc.model.FoodJoint;
 import com.csc.model.FoodPurchaseTransaction;
+import com.csc.model.User;
 
 public class CafeService extends FoodJointService {
 	
@@ -20,12 +21,12 @@ public class CafeService extends FoodJointService {
 	
 
 	@Override
-	protected void createOrder(ArrayList<FoodItem> foodItems) {
+	protected void createOrder(ArrayList<FoodItem> foodItems,User user,FoodJoint foodJoint) {
 		// TODO creates the transaction by setting status and the pickup location.
-	    String  cardNumber = CurrentSession.getInstance().getCurrentUser().getCardNumber();
-	    FoodJoint currentFoodJoint = CurrentSession.getInstance().getCurrentFoodJoint();
+	    String  cardNumber = user.getCardNumber();
+	    FoodJoint currentFoodJoint = foodJoint;
 		FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,
-						cardNumber,currentFoodJoint);
+						cardNumber,currentFoodJoint.getId());
 		transaction.setStatus("Ordered");
 		transaction.createTransaction();
 	}

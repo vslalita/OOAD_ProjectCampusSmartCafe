@@ -10,6 +10,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import com.csc.CurrentSession;
 import com.csc.model.FoodPurchaseTransaction;
 import com.csc.service.UserService;
 
@@ -174,7 +175,7 @@ public class PickUpOrdersPanel extends javax.swing.JPanel implements ActionListe
        if(orders.size()>0){
     	   for(int i=0;i<orders.size();i++){
                FoodPurchaseTransaction order=orders.get(i);
-               model.addRow(new Object[]{Boolean.FALSE,order.getId(),order.getFoodJoint().getLocation()});
+               model.addRow(new Object[]{Boolean.FALSE,order.getId(),CurrentSession.getInstance().getCurrentFoodJoint().getLocation()});
            }
        }
     }
