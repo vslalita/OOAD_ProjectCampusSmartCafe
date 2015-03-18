@@ -116,7 +116,7 @@ public class PreferencePanel extends javax.swing.JPanel {
                     else if(jRadioButton1.isSelected()){
                         try{
                             int calories=Integer.parseInt(jTextField1.getText());
-    					    CSCApplicationContext.getUserController().updateFoodPreference(CSCApplicationContext.getCurrentSession().getCurrentUser(),calories,"add",isLowSodium,isLowFat);
+    					    CSCApplicationContext.getUserController().updateFoodPreference(calories,"add",isLowSodium,isLowFat);
                         }catch(Exception NumberFormatException){
                             JOptionPane.showMessageDialog(null,"Enter a valid number");
                             jTextField1.setText("");

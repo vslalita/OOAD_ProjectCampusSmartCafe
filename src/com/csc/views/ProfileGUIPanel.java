@@ -145,6 +145,7 @@ private JFreeChart createBarChart(final CategoryDataset dataset) {
 		jPanel1 = new javax.swing.JPanel();
 		jPanel2 = new ChartPanel(createChart(createDatasetForDietaryProfile(), "Dietary"));
 		jPanel3 = new ChartPanel(createBarChart(createDatasetForExpenseProfile()));
+		//Attach observers
         CurrentSession.getInstance().getCurrentUser().addObservers(this);
         CurrentSession.getInstance().getCurrentUser().getFoodPreference().addObserver(this);
 
@@ -217,6 +218,7 @@ private JFreeChart createBarChart(final CategoryDataset dataset) {
 	private javax.swing.JPanel jPanel1;
 	private javax.swing.JPanel jPanel2;
 	private javax.swing.JPanel jPanel3;
+	
 	// End of variables declaration                   
 	@Override
 	public void updateComponents() {
