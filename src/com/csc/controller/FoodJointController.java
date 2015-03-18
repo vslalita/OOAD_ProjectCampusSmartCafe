@@ -14,4 +14,8 @@ public class FoodJointController {
 		FoodJointService foodJointService = CSCServiceContext.getFoodJointService();
 		return foodJointService.getFoodPurchaseTransactionDetails(orderTransactionId);	
 	}
+	
+	public ArrayList<FoodItem> getFoodJointItems(){
+		return CSCServiceContext.getFoodJointService().displayItems();
+	}
 }
