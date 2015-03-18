@@ -21,7 +21,7 @@ import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.model.FoodJoint;
 
-public class MapJFrame extends JFrame{
+public class MapFrame extends JFrame{
 
 
 	/**
@@ -30,7 +30,7 @@ public class MapJFrame extends JFrame{
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String args[]){
-		new MapJFrame().start();
+		new MapFrame().start();
 	}
 
 	public void start(){

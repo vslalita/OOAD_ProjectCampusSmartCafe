@@ -56,7 +56,7 @@ public class LoginCafe extends javax.swing.JFrame {
             	String cardNumber = jTextField2.getText();
 				if(cardNumber.matches("[0-9]+") && cardNumber.length()==5) {	
 					 if(CSCApplicationContext.getUserController().login(cardNumber)==true){
-						 JFrame homeFrame =new HomPageGUI();
+						 JFrame homeFrame =new HomePageFrame();
 						 homeFrame.setVisible(true);
 						 dispose();
 					 }

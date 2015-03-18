@@ -32,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author twinklesiva05
  */
-public class HomPageGUI extends javax.swing.JFrame implements IObserver{
+public class HomePageFrame extends javax.swing.JFrame implements IObserver{
 
 	/**
 	 * 
@@ -41,7 +41,7 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 	/**
 	 * Creates new form MainFrame
 	 */
-	public HomPageGUI() {
+	public HomePageFrame() {
 		initComponents();
 	}
 
@@ -388,7 +388,7 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 		jPanel3.add(jPanel4, "Home");
 
 		
-		jPanel3.add("ViewProfile",new ProfileGUIPanel());
+		jPanel3.add("ViewProfile",new ProfilePanel());
 		jPanel3.add("EnterExpenses",new ExpensePanel());
 		jPanel3.add("EnterPreferences",new PreferencePanel());
 		jPanel3.add("PickUpOrders",panel);
@@ -555,20 +555,20 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(HomPageGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(HomePageFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(HomPageGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(HomePageFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(HomPageGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(HomePageFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(HomPageGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(HomePageFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 		//</editor-fold>
 
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new HomPageGUI().setVisible(true);
+				new HomePageFrame().setVisible(true);
 			}
 		});
 	}

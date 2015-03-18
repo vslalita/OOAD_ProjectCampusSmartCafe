@@ -24,10 +24,10 @@ public class CafeService extends FoodJointService {
 	protected void createOrder(User user,FoodJoint foodJoint,ArrayList<FoodItem> foodItems) {
 		// TODO creates the transaction by setting status and the pickup location.
 	    String  cardNumber = user.getCardNumber();
+	    FoodJoint currentFoodJoint = foodJoint;
 		FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,
-						cardNumber,foodJoint.getId());
+						cardNumber,currentFoodJoint.getId());
 		transaction.setStatus("Ordered");
-		transaction.setFoodItems(foodItems);
 		super.createTransaction(transaction);
 	}
 	

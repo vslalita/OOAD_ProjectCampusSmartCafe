@@ -33,7 +33,7 @@ import com.csc.service.ProfileService;
  *
  * @author twinklesiva05
  */
-public class ProfileGUIPanel extends javax.swing.JPanel implements IObserver {
+public class ProfilePanel extends javax.swing.JPanel implements IObserver {
      
 	
 	/**
@@ -43,7 +43,7 @@ public class ProfileGUIPanel extends javax.swing.JPanel implements IObserver {
 	/**
 	 * Creates new form NewJPanel
 	 */
-	public ProfileGUIPanel() {
+	public ProfilePanel() {
 		initComponents();
 	}
 
