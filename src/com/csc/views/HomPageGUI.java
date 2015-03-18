@@ -509,7 +509,7 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 	private void populateItems() {
 		// TODO remove instance and take from session
 		ArrayList<FoodItem> items;
-			items=CSCServiceContext.getFoodJointService().displayItems();
+			items=CSCApplicationContext.getFoodJointController().getFoodJointItems();
 		if(items!=null){
 			for(int i=0;i<items.size();i++){
 				FoodItem item=items.get(i);
