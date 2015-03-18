@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
+import com.csc.controller.CSCServiceContext;
 import com.csc.model.FoodPreference;
 import com.csc.model.FoodPurchaseTransaction;
 import com.csc.model.User;
@@ -78,9 +79,8 @@ public class UserService {
 			ResultSet unpickedOrdersQueryResult=unpickedOrdersStatement.executeQuery(unpickedOrdersQuery);
 			while(unpickedOrdersQueryResult.next()){
 				int id=unpickedOrdersQueryResult.getInt("id");
-				FoodPurchaseTransaction order=new FoodPurchaseTransaction();
-				order.setOrderDetails(id);
-				//order.setStatus(unpickedOrdersQueryResult.getString("status"));
+				FoodJointService foodJointService = CSCServiceContext.getFoodJointService();
+				FoodPurchaseTransaction order = foodJointService.getFoodPurchaseTransactionDetails(id);
 				unpickedOrders.add(order);
 			}
 		} catch (SQLException e) {
@@ -107,13 +107,6 @@ public class UserService {
 	
 	public boolean pickUpOrder(FoodPurchaseTransaction transaction){
 		transaction.setStatus("Delivered");
-		if(transaction.update()){
-		  return true;	
-		}
-		else{
-			return false;
-		}
+		return CSCServiceContext.getFoodJointService().updateTransaction(transaction);
 	}
-
-	
 }

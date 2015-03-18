@@ -21,14 +21,14 @@ public class CafeService extends FoodJointService {
 	
 
 	@Override
-	protected void createOrder(ArrayList<FoodItem> foodItems,User user,FoodJoint foodJoint) {
+	protected void createOrder(User user,FoodJoint foodJoint,ArrayList<FoodItem> foodItems) {
 		// TODO creates the transaction by setting status and the pickup location.
 	    String  cardNumber = user.getCardNumber();
-	    FoodJoint currentFoodJoint = foodJoint;
 		FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,
-						cardNumber,currentFoodJoint.getId());
+						cardNumber,foodJoint.getId());
 		transaction.setStatus("Ordered");
-		transaction.createTransaction();
+		transaction.setFoodItems(foodItems);
+		super.createTransaction(transaction);
 	}
 	
 	@Override

@@ -20,18 +20,13 @@ public class VendingMachineService extends FoodJointService {
 	}
 	
 	@Override
-	protected void createOrder(ArrayList<FoodItem> foodItems,User user,FoodJoint foodJoint) {
+	protected void createOrder(User user,FoodJoint foodJoint,ArrayList<FoodItem> foodItems) {
 		// TODO create a transaction. Implementation involves immediate delivery of the item.
-		if(foodItems.size()>0){
 			User currentUser=user;
 			FoodPurchaseTransaction transaction=new FoodPurchaseTransaction(foodItems,
 					user.getCardNumber(),foodJoint.getId());
 			transaction.setStatus("Delivered");
-			transaction.createTransaction();
-		}
-		else{
-			System.out.println("Food Items not selected");
-		}
+			super.createTransaction(transaction);
 	}
 
 	@Override
