@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
@@ -32,7 +33,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author twinklesiva05
  */
-public class HomPageGUI extends javax.swing.JFrame implements IObserver{
+public class HomPageFrame extends javax.swing.JFrame implements java.util.Observer{
 
 	/**
 	 * 
@@ -41,8 +42,10 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 	/**
 	 * Creates new form MainFrame
 	 */
-	public HomPageGUI() {
+	public HomPageFrame() {
 		initComponents();
+		CurrentSession.getInstance().getCurrentUser().addObserver(this);
+		CurrentSession.getInstance().getCurrentUser().getFoodPreference().addObserver(this);
 	}
 
 	/**
@@ -103,8 +106,7 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 
 		jRadioButton1.setText("jRadioButton1");
 		
-		CurrentSession.getInstance().getCurrentUser().addObservers(this);
-		CurrentSession.getInstance().getCurrentUser().getFoodPreference().addObserver(this);
+		
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -177,15 +179,7 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				if(items!=null&&items.size()>0){
-					FoodJointService foodJointValidation;
-					if(CurrentSession.getInstance().getCurrentFoodJoint().isVendingMachine()){
-						 foodJointValidation=new VendingMachineService();
-					}
-					else{
-						foodJointValidation=new CafeService();
-					}
-					CurrentSession session=CurrentSession.getInstance();
-					if(foodJointValidation.validateAndCreateOrder(items,session.getCurrentUser(),session.getCurrentFoodJoint())){
+					if(CSCApplicationContext.getFoodJointController().validateAndCreate(items)){
 //						FoodPreference fp=session.getCurrentUser().getFoodPreference();
 //						jLabel6.setText("Daily Calories Remaining: "+fp.getRemainingCalories());
 //						jLabel7.setText("Funds remaining for this Month: "+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+"  ");
@@ -205,7 +199,9 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 		});
 
 		
-		updateComponents();
+		FoodPreference fp=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
+		jLabel6.setText("Daily Calories Remaining: "+fp.getRemainingCalories());
+		jLabel7.setText("Funds remaining for this Month: "+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+"  ");
 
 		jButton3.setText("<html><center>View<br>Profile</center></html>");
 		jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -245,19 +241,8 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 		DefaultCellEditor editor=new DefaultCellEditor(checkBox);
 		
 		
-//		jTable1.setModel(new javax.swing.table.DefaultTableModel(populateItems(jTable1)
-//				,0));
-		
-//		jTable1.setModel(new javax.swing.table.DefaultTableModel(
-//				populateItems(jTable1),
-//				new String [] {
-//					"check/uncheck","id", "Item Name", "Price", "Calories"
-//				}
-//				));
 		jTable1.getColumnModel().getColumn(0).setCellEditor(editor);
 		
-		//jTable1.getColumnModel().getColumn(0).setCellRenderer(new CheckBoxCellRenderer());
-
 		jTable1.getModel().addTableModelListener(new TableModelListener(){
 			@Override
 			public void tableChanged(TableModelEvent e) {
@@ -266,8 +251,6 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 				getOrderItems(e.getFirstRow());
 			}
 		});
-		
-
 		
 		javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
 		jPanel2.setLayout(jPanel2Layout);
@@ -326,8 +309,9 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 		jLabel4.setText("Total Amount:0");
 		jLabel5.setText("Total Calories:0");
 		CurrentSession.getInstance().getCurrentUser().updateRemainingExpenses();
-        FoodPreference fp=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
-		fp.updateRemainingCalories();
+		FoodPreference fp1=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
+		jLabel6.setText("Daily Calories Remaining: "+fp.getRemainingCalories());
+		jLabel7.setText("Funds remaining for this Month: "+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+"  ");
 		
 
 		jScrollPane1.setViewportView(jTable1);
@@ -388,7 +372,7 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 		jPanel3.add(jPanel4, "Home");
 
 		
-		jPanel3.add("ViewProfile",new ProfileGUIPanel());
+		jPanel3.add("ViewProfile",new ProfilePanel());
 		jPanel3.add("EnterExpenses",new ExpensePanel());
 		jPanel3.add("EnterPreferences",new PreferencePanel());
 		jPanel3.add("PickUpOrders",panel);
@@ -441,13 +425,11 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 	}// </editor-fold>                        
 
 	private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		// TODO add your handling code here:
 		CardLayout layout=(CardLayout)jPanel3.getLayout();
 		layout.show(jPanel3, "Home");
 	}                                        
 
 	private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-		// TODO add your handling code here:
 		CardLayout layout= (CardLayout)jPanel3.getLayout();
 		layout.show(jPanel3, "PickUpOrders");
 	}                                        
@@ -455,7 +437,6 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 
 	ArrayList<FoodItem> items=new ArrayList<FoodItem>();
 	protected void getOrderItems(int firstRow) {
-		// TODO Auto-generated method stub
 		FoodItem item;
 		if(jTable1.getValueAt(firstRow, 0).equals(true)){
 			Integer id=(Integer) jTable1.getValueAt(firstRow,1);
@@ -509,7 +490,7 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 	private void populateItems() {
 		// TODO remove instance and take from session
 		ArrayList<FoodItem> items;
-			items=CSCServiceContext.getFoodJointService().displayItems();
+			items=CSCApplicationContext.getFoodJointController().getFoodJointItems();
 		if(items!=null){
 			for(int i=0;i<items.size();i++){
 				FoodItem item=items.get(i);
@@ -555,20 +536,20 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(HomPageGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(HomPageFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(HomPageGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(HomPageFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(HomPageGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(HomPageFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(HomPageGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(HomPageFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 		//</editor-fold>
 
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new HomPageGUI().setVisible(true);
+				new HomPageFrame().setVisible(true);
 			}
 		});
 	}
@@ -596,9 +577,9 @@ public class HomPageGUI extends javax.swing.JFrame implements IObserver{
 	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JTable jTable1;
 	// End of variables declaration                   
+	
 	@Override
-	public void updateComponents() {
-		// TODO Auto-generated method stub
+	public void update(Observable o, Object arg) {
 		FoodPreference fp=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
 		jLabel6.setText("Daily Calories Remaining: "+fp.getRemainingCalories());
 		jLabel7.setText("Funds remaining for this Month: "+CurrentSession.getInstance().getCurrentUser().getRemainingExpenses()+"  ");

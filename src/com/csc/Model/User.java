@@ -16,7 +16,7 @@ import com.csc.DatabaseConnection;
 import com.csc.ObservableObserver.IObservable;
 import com.csc.ObservableObserver.IObserver;
 
-public class User implements IObservable{
+public class User extends java.util.Observable{
 	private int id;
 	private String firstName;
 	private String lastName;
@@ -136,22 +136,14 @@ public class User implements IObservable{
 			String query="update user set expenses_remaining="+fundsRemaining+" where card_number='"+this.cardNumber+"'";
 			this.expenses_remaining=fundsRemaining;
 			updateProfileStatement.executeUpdate(query);
-			notifyObservers();
+			setChanged();
+			super.notifyObservers();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	@Override
-	public void notifyObservers() {
-		// TODO Auto-generated method stub
-		if(observers.size()>0){
-			for(int i=0;i<observers.size();i++){
-				observers.get(i).updateComponents();
-			}
-		}
-	}
 
 	
 }

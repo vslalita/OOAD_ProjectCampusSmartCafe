@@ -6,22 +6,21 @@ public class FoodJoint {
 	private String address;
 	private String name;
 	private int xPosition;
-	private int yposition;
+	private int yPosition;
 	private boolean isCafe;
 	private boolean isVendingMachine;
     
     public FoodJoint(int id,String name,String location,int xPosition,int yPosition,boolean isCafe,boolean isVendingMachine){
     	this.id=id;
-    	this.setName(name);
+    	this.name=name;
     	this.address=location;
     	this.xPosition=xPosition;
-    	this.yposition=yPosition;
+    	this.yPosition=yPosition;
     	this.isCafe=isCafe;
     	this.isVendingMachine=isVendingMachine;
     }
     
     public FoodJoint(){
-    	
     }
 
 	public int getId() {
@@ -57,11 +56,11 @@ public class FoodJoint {
 	}
 
 	public int getYPosition() {
-		return yposition;
+		return yPosition;
 	}
 
-	public void setYPosition(int yposition) {
-		this.yposition = yposition;
+	public void setYPosition(int yPosition) {
+		this.yPosition = yPosition;
 	}
 
 	public boolean isCafe() {
@@ -79,6 +78,4 @@ public class FoodJoint {
 	public void setVendingMachine(boolean isVendingMachine) {
 		this.isVendingMachine = isVendingMachine;
 	}
-   
-    
 }

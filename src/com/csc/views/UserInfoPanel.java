@@ -106,7 +106,7 @@ public class UserInfoPanel extends javax.swing.JPanel {
         jLabel3.setText("Card Number:");
         jLabel4.setText(user.getCardNumber());
         jLabel5.setText("Daily Calorie Intake");
-		FoodPreference fp=CurrentSession.getInstance().getCurrentUser().getFoodPreference();
+		FoodPreference fp=user.getFoodPreference();
         jLabel6.setText(""+fp.getCalories());
         jLabel7.setText("Monthly Expenses");
         jLabel8.setText(""+user.getExpenses());

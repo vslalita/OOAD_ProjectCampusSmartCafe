@@ -59,7 +59,7 @@ public class LoginVendingMachinePanel extends javax.swing.JFrame {
         				if(cardNumber.matches("[0-9]+") && cardNumber.length()==5) {
         					 // create the user for this session.
         					 if(CSCApplicationContext.getUserController().login(cardNumber)){
-        						 JFrame homeFrame =new HomPageGUI();
+        						 JFrame homeFrame =new HomPageFrame();
         						 homeFrame.setVisible(true);
         						 dispose();
         					 }

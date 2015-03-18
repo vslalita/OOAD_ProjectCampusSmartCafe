@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.DatabaseConnection;
+import com.csc.model.FoodJoint;
 import com.csc.model.FoodPreference;
 import com.csc.model.FoodPurchaseTransaction;
 import com.csc.model.User;
@@ -39,7 +40,6 @@ public class UserService {
 		return user;
 	}
 	
-	
 	private FoodPreference getFoodPreferenceByCardNumber(String cardNumber){
 		FoodPreference preference=null;
 		Statement preferenceStatement;
@@ -60,17 +60,18 @@ public class UserService {
 		}	
 		return preference;
 	}
-	public void updateFoodPreference(User user,int calories,String action,boolean lowSodium,boolean lowFat){
+	
+    public void updateFoodPreference(User user,int calories,String action,boolean lowSodium,boolean lowFat){
 		FoodPreference foodPreference = user.getFoodPreference();
 		foodPreference.save(calories,action,lowSodium,lowFat);
 	}
 	
-	public ArrayList<FoodPurchaseTransaction> getCurrentUserUnpickedOrders(){
+	public ArrayList<FoodPurchaseTransaction> getUserUnpickedOrders(User user,FoodJoint foodJoint){
 		ArrayList<FoodPurchaseTransaction> unpickedOrders=new ArrayList<FoodPurchaseTransaction>();
 		Statement unpickedOrdersStatement;
 		try {
-			String cardNumber=CurrentSession.getInstance().getCurrentUser().getCardNumber();
-			int foodJointId= CurrentSession.getInstance().getCurrentFoodJoint().getId();
+			String cardNumber=user.getCardNumber();
+			int foodJointId= foodJoint.getId();
 			unpickedOrdersStatement = DatabaseConnection.connectionRequest().createStatement();
 			String unpickedOrdersQuery="Select * from food_order_transaction where status='Ordered' "
 					+ "and card_number='"+cardNumber+"'"
@@ -89,20 +90,19 @@ public class UserService {
 		return unpickedOrders;
 	}
 	
-	public void updateExpenses(int expense,String action){
-			User currentSessionUser=CurrentSession.getInstance().getCurrentUser();
-			int currentExpenses= currentSessionUser.getExpenses();
+	public void updateExpenses(User user,int expense,String action){
+			
+			int currentExpenses= user.getExpenses();
 			if(action.equals("add")){
-				
-				currentSessionUser.setExpenses(currentExpenses+expense);
+				user.setExpenses(currentExpenses+expense);
 			}
 			if(action.equals("reduce")){
-				int amountRemaining=currentSessionUser.getRemainingExpenses();
-				if(expense<currentSessionUser.getExpenses() &&expense<amountRemaining){
-					currentSessionUser.setExpenses(currentExpenses-expense);
+				int amountRemaining=user.getRemainingExpenses();
+				if(expense<user.getExpenses() &&expense<amountRemaining){
+					user.setExpenses(currentExpenses-expense);
 				}
 			}
-			currentSessionUser.updateExpenses();
+			user.updateExpenses();
 	}
 	
 	public boolean pickUpOrder(FoodPurchaseTransaction transaction){

@@ -14,7 +14,7 @@ import com.csc.DatabaseConnection;
 import com.csc.ObservableObserver.IObservable;
 import com.csc.ObservableObserver.IObserver;
 
-public class FoodPreference implements IObservable {
+public class FoodPreference extends java.util.Observable {
 	private String cardNumber;
 	private int calories;
 	private boolean lowSodium;
@@ -126,6 +126,7 @@ public class FoodPreference implements IObservable {
 			updateProfileStatement.executeUpdate(query);
 			User currentUser = CurrentSession.getInstance().getCurrentUser();
 			currentUser.setFoodPreference(this);
+			setChanged();
 			notifyObservers();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -151,7 +152,6 @@ public class FoodPreference implements IObservable {
 		return remainingCalories;
 	}
 
-	
 	public void addObserver(IObserver observer){
 		observers.add(observer);
 	}

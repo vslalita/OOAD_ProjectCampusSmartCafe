@@ -10,7 +10,9 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
+import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
+import com.csc.controller.CSCServiceContext;
 import com.csc.model.FoodPurchaseTransaction;
 import com.csc.service.UserService;
 
@@ -69,7 +71,7 @@ public class PickUpOrdersPanel extends javax.swing.JPanel implements ActionListe
                 // TODO Auto-generated method stub
                 for(int i=0;i<pickUpList.size();i++){
                     FoodPurchaseTransaction orderFoodPurchaseTransaction=pickUpList.get(i);
-                    if(currentUserUnpickedOrders.pickUpOrder(orderFoodPurchaseTransaction)){
+                    if(CSCApplicationContext.getUserController().pickUpOrder(orderFoodPurchaseTransaction)){
                         pickUpList.remove(i);
                         updateTableContent();
                     }
@@ -170,8 +172,8 @@ public class PickUpOrdersPanel extends javax.swing.JPanel implements ActionListe
 
     private void getOrderDetails(DefaultTableModel model) {
         // TODO Auto-generated method stub
-    	
-        ArrayList<FoodPurchaseTransaction> orders=currentUserUnpickedOrders.getCurrentUserUnpickedOrders();
+    	CurrentSession session=CurrentSession.getInstance();
+        ArrayList<FoodPurchaseTransaction> orders=CSCApplicationContext.getUserController().getUnpickedOrders(session.getCurrentUser(),session.getCurrentFoodJoint());
        if(orders.size()>0){
     	   for(int i=0;i<orders.size();i++){
                FoodPurchaseTransaction order=orders.get(i);
@@ -186,8 +188,7 @@ public class PickUpOrdersPanel extends javax.swing.JPanel implements ActionListe
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private UserService currentUserUnpickedOrders=new UserService();
-    // End of variables declaration                   
+   // End of variables declaration                   
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

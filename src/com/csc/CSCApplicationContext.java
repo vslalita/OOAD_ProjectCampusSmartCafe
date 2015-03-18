@@ -5,8 +5,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.csc.controller.CSCServiceContext;
 import com.csc.controller.FoodJointController;
 import com.csc.controller.UserController;
+import com.csc.model.FoodItem;
 import com.csc.model.FoodJoint;
 import com.csc.service.CafeService;
 import com.csc.service.FoodJointService;
@@ -35,14 +37,8 @@ public class CSCApplicationContext {
 				String name=foodJointQueryResult.getString("name");
 				boolean isVendingMachine=foodJointQueryResult.getBoolean("is_vending_machine");
 				boolean isCafe=foodJointQueryResult.getBoolean("is_cafe");
-				//				if(foodJointQueryResult.getBoolean("is_vending_machine")){
 				foodJoint=new FoodJoint(id,name,location,xPosition,yPosition,isCafe,isVendingMachine);
 				foodJoints.add(foodJoint);
-				//				}
-				//				if(foodJointQueryResult.getBoolean("is_cafe")){
-				//					foodJoint=new Cafe(id,name,location,xPosition,yPosition,isCafe,isVendingMachine);
-				//					foodJoints.add(foodJoint);
-				//				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -50,11 +46,6 @@ public class CSCApplicationContext {
 		}
 		return foodJoints;
 	}
-	
-	public static CurrentSession getCurrentSession(){
-		return CurrentSession.getInstance();
-	}
-	
 	
 	public static UserController getUserController(){
 		if(userController==null){

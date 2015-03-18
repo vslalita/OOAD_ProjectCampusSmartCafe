@@ -18,7 +18,7 @@ public class CurrentSession {
     
 	public synchronized static CurrentSession getInstance(){
 		if (instance ==null) {
-			 instance=new CurrentSession();
+			instance=new CurrentSession();
 		}
 		return instance;
 	}

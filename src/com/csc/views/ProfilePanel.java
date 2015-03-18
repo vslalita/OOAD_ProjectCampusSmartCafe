@@ -25,15 +25,17 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.PieDataset;
 import org.jfree.util.Rotation;
 
+import com.csc.CSCApplicationContext;
 import com.csc.CurrentSession;
 import com.csc.ObservableObserver.IObserver;
+import com.csc.controller.CSCServiceContext;
 import com.csc.service.ProfileService;
 
 /**
  *
  * @author twinklesiva05
  */
-public class ProfileGUIPanel extends javax.swing.JPanel implements IObserver {
+public class ProfilePanel extends javax.swing.JPanel implements IObserver {
      
 	
 	/**
@@ -43,18 +45,16 @@ public class ProfileGUIPanel extends javax.swing.JPanel implements IObserver {
 	/**
 	 * Creates new form NewJPanel
 	 */
-	public ProfileGUIPanel() {
+	public ProfilePanel() {
 		initComponents();
 	}
 
 	private  PieDataset createDatasetForDietaryProfile() {
-		ProfileService p=new ProfileService();
-		return p.getDietaryStatistics(CurrentSession.getInstance().getCurrentUser());
+		return CSCApplicationContext.getUserController().getDietaryStatistics(CurrentSession.getInstance().getCurrentUser());
 	}
 	
 	private  CategoryDataset createDatasetForExpenseProfile() {
-		ProfileService p=new ProfileService();
-		return p.getExpensesStatics(CurrentSession.getInstance().getCurrentUser());
+		return CSCApplicationContext.getUserController().getExpensesStatistics(CurrentSession.getInstance().getCurrentUser());
 	}
 
 	private JFreeChart createChart(PieDataset dataset, String title) {
